@@ -9,6 +9,7 @@ import { useSupabaseTable } from "@/hooks/useSupabaseTable";
 import { listFiles } from "@/lib/storage";
 import { GraduationCap, BookOpen, Briefcase, MapPin, Phone, Mail, Sparkles, ArrowRight, LogIn, Newspaper, Megaphone, ImageIcon } from "lucide-react";
 import logo from "@/assets/logo-yayasan.png";
+import { PublicSidebar, PublicMobileNavTrigger } from "@/components/layout/PublicSidebar";
 
 const PLACEHOLDER = "/placeholder.svg";
 
@@ -65,36 +66,39 @@ export default function PublicHome() {
   const heroBg = settings?.hero_image_url || banners[0]?.image_url;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white p-1 shadow-soft">
-              <img src={logo} alt="Logo" className="h-full w-full object-contain" />
-            </div>
-            <div className="hidden sm:block">
-              <p className="text-sm font-bold leading-tight">{settings?.nama_yayasan ?? "Yayasan Darul Rohman"}</p>
-              <p className="text-[11px] text-muted-foreground">{settings?.tagline ?? "Morombuh Kwanyar"}</p>
-            </div>
-          </Link>
-          <Link to="/login">
-            <Button className="gradient-primary text-primary-foreground"><LogIn className="mr-2 h-4 w-4" /> Login Admin</Button>
-          </Link>
-        </div>
-      </header>
+    <div id="top" className="min-h-screen bg-background text-foreground lg:flex">
+      <PublicSidebar yayasanName={settings?.nama_yayasan} tagline={settings?.tagline} />
 
-      <section className="relative overflow-hidden gradient-hero text-white">
-        {heroBg && <div className="absolute inset-0 opacity-30" style={{ backgroundImage: `url(${heroBg})`, backgroundSize: "cover", backgroundPosition: "center" }} />}
-        <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-24 md:px-6">
-          <Badge className="mb-4 border-0 bg-secondary text-secondary-foreground"><Sparkles className="mr-1 h-3 w-3" /> Sistem Terpadu Pendidikan</Badge>
-          <h1 className="font-display text-3xl font-bold md:text-5xl">{settings?.hero_title ?? "Membentuk Generasi Qur'ani, Cerdas & Berakhlak Mulia"}</h1>
-          <p className="mt-5 max-w-xl text-base text-white/90 md:text-lg">{settings?.hero_subtitle ?? settings?.deskripsi ?? "Yayasan Darul Rohman menyelenggarakan pendidikan Islam terpadu MI, SMP, SMK."}</p>
-          <div className="mt-7 flex flex-wrap gap-3">
-            <a href="#unit"><Button size="lg" className="bg-secondary text-secondary-foreground">Jelajahi Unit <ArrowRight className="ml-2 h-4 w-4" /></Button></a>
-            <a href="#kontak"><Button size="lg" variant="outline" className="border-white/40 bg-white/10 text-white hover:bg-white/20">Hubungi Kami</Button></a>
+      <div className="min-w-0 flex-1">
+        <header className="sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur lg:hidden">
+          <div className="flex h-16 items-center justify-between px-4">
+            <div className="flex items-center gap-2">
+              <PublicMobileNavTrigger yayasanName={settings?.nama_yayasan} tagline={settings?.tagline} />
+              <Link to="/" className="flex items-center gap-2">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white p-1 shadow-soft">
+                  <img src={logo} alt="Logo" className="h-full w-full object-contain" />
+                </div>
+                <p className="text-sm font-bold leading-tight">{settings?.nama_yayasan ?? "Darul Rohman"}</p>
+              </Link>
+            </div>
+            <Link to="/login">
+              <Button size="sm" className="gradient-primary text-primary-foreground"><LogIn className="mr-1.5 h-4 w-4" /> Login</Button>
+            </Link>
           </div>
-        </div>
-      </section>
+        </header>
+
+        <section id="tentang" className="relative overflow-hidden gradient-hero text-white">
+          {heroBg && <div className="absolute inset-0 opacity-30" style={{ backgroundImage: `url(${heroBg})`, backgroundSize: "cover", backgroundPosition: "center" }} />}
+          <div className="relative mx-auto max-w-6xl px-4 py-16 md:py-24 md:px-8">
+            <Badge className="mb-4 border-0 bg-secondary text-secondary-foreground"><Sparkles className="mr-1 h-3 w-3" /> Sistem Terpadu Pendidikan</Badge>
+            <h1 className="font-display text-3xl font-bold md:text-5xl">{settings?.hero_title ?? "Membentuk Generasi Qur'ani, Cerdas & Berakhlak Mulia"}</h1>
+            <p className="mt-5 max-w-xl text-base text-white/90 md:text-lg">{settings?.hero_subtitle ?? settings?.deskripsi ?? "Yayasan Darul Rohman menyelenggarakan pendidikan Islam terpadu MI, SMP, SMK."}</p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <a href="#unit"><Button size="lg" className="bg-secondary text-secondary-foreground">Jelajahi Unit <ArrowRight className="ml-2 h-4 w-4" /></Button></a>
+              <a href="#kontak"><Button size="lg" variant="outline" className="border-white/40 bg-white/10 text-white hover:bg-white/20">Hubungi Kami</Button></a>
+            </div>
+          </div>
+        </section>
 
       <ErrorBoundary silent label="Banners">
         {banners.length > 1 && (
@@ -131,7 +135,7 @@ export default function PublicHome() {
               { key: "smp", title: "SMP Darul Rohman", icon: GraduationCap, color: "gradient-sky", desc: settings?.deskripsi_smp },
               { key: "smk", title: "SMK Darul Rohman", icon: Briefcase, color: "gradient-gold", desc: settings?.deskripsi_smk },
             ].map((u) => (
-              <Card key={u.key} className="rounded-2xl border-border shadow-soft">
+              <Card key={u.key} id={`unit-${u.key}`} className="scroll-mt-20 rounded-2xl border-border shadow-soft">
                 <CardContent className="p-6">
                   <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${u.color} text-primary-foreground`}><u.icon className="h-7 w-7" /></div>
                   <h3 className="mt-4 font-display text-xl font-bold">{u.title}</h3>
@@ -143,9 +147,43 @@ export default function PublicHome() {
         </div>
       </section>
 
+      <section id="akademik" className="mx-auto max-w-7xl px-4 py-14 md:px-6">
+        <Badge variant="outline" className="border-primary text-primary">Akademik</Badge>
+        <h2 className="mt-2 font-display text-2xl font-bold md:text-3xl">Informasi Akademik</h2>
+        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+          Jadwal pelajaran, pengumuman, dan informasi akademik terbaru dari setiap unit.
+          Login sebagai admin untuk mengelola data lengkap.
+        </p>
+        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          {[
+            { label: "Jadwal Pelajaran", desc: "Real-time per unit", target: "#pengumuman" },
+            { label: "Pengumuman", desc: "Update terbaru", target: "#pengumuman" },
+            { label: "Berita & Artikel", desc: "Kegiatan sekolah", target: "#berita" },
+          ].map((a) => (
+            <a key={a.label} href={a.target} className="rounded-2xl border border-border bg-card p-5 shadow-soft transition hover:shadow-md-soft">
+              <p className="font-bold">{a.label}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{a.desc}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section id="ppdb" className="bg-muted/40 py-14">
+        <div className="mx-auto max-w-7xl px-4 md:px-6">
+          <div className="rounded-3xl gradient-primary p-8 text-primary-foreground shadow-md-soft md:p-12">
+            <Badge className="border-0 bg-secondary text-secondary-foreground">PPDB</Badge>
+            <h2 className="mt-3 font-display text-2xl font-bold md:text-3xl">Penerimaan Peserta Didik Baru</h2>
+            <p className="mt-3 max-w-2xl text-sm text-primary-foreground/90">
+              Daftarkan putra-putri Anda di MI, SMP, atau SMK Darul Rohman. Hubungi kami untuk informasi pendaftaran.
+            </p>
+            <a href="#kontak"><Button size="lg" className="mt-5 bg-secondary text-secondary-foreground">Hubungi Pendaftaran <ArrowRight className="ml-2 h-4 w-4" /></Button></a>
+          </div>
+        </div>
+      </section>
+
       <ErrorBoundary silent label="Pengumuman">
         {pengumuman.length > 0 && (
-          <section className="mx-auto max-w-7xl px-4 py-14 md:px-6">
+          <section id="pengumuman" className="mx-auto max-w-7xl px-4 py-14 md:px-6">
             <Badge variant="outline"><Megaphone className="mr-1 h-3 w-3" /> Pengumuman</Badge>
             <h2 className="mt-2 font-display text-2xl font-bold md:text-3xl">Pengumuman Terbaru</h2>
             <div className="mt-6 grid gap-4 md:grid-cols-3">
@@ -162,7 +200,7 @@ export default function PublicHome() {
 
       <ErrorBoundary silent label="Berita">
         {berita.length > 0 && (
-          <section className="bg-muted/40 py-14">
+          <section id="berita" className="bg-muted/40 py-14">
             <div className="mx-auto max-w-7xl px-4 md:px-6">
               <Badge variant="outline"><Newspaper className="mr-1 h-3 w-3" /> Berita</Badge>
               <h2 className="mt-2 font-display text-2xl font-bold md:text-3xl">Berita & Artikel</h2>
@@ -198,7 +236,7 @@ export default function PublicHome() {
 
       <ErrorBoundary silent label="Galeri">
         {gallery.length > 0 && (
-          <section className="mx-auto max-w-7xl px-4 py-14 md:px-6">
+          <section id="galeri" className="mx-auto max-w-7xl px-4 py-14 md:px-6">
             <h2 className="font-display text-2xl font-bold md:text-3xl">Galeri</h2>
             <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
               {gallery.map((u) => (
@@ -252,6 +290,7 @@ export default function PublicHome() {
           <p>Sistem Terpadu Pendidikan v1.0</p>
         </div>
       </footer>
+      </div>
     </div>
   );
 }
