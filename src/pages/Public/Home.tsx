@@ -17,6 +17,7 @@ const PLACEHOLDER = "/placeholder.png";
 
 export default function PublicHome() {
   const [settings, setSettings] = useState<any>(null);
+  const [showJadwal, setShowJadwal] = useState(false);
   const [storageGallery, setStorageGallery] = useState<string[]>([]);
   const { data: banners } = useSupabaseTable<any>("cms_banners", { filters: { is_active: true }, orderBy: { column: "sort_order", ascending: true } });
   const { data: posts } = useSupabaseTable<any>("cms_posts", { filters: { status: "published" } });
@@ -42,10 +43,11 @@ export default function PublicHome() {
   };
   useEffect(() => {
     loadGallery();
-    // Refresh gallery on window focus (storage doesn't have realtime)
     const onFocus = () => loadGallery();
+    const onHash = () => { if (window.location.hash === "#jadwal") setShowJadwal(true); };
     window.addEventListener("focus", onFocus);
-    return () => window.removeEventListener("focus", onFocus);
+    window.addEventListener("hashchange", onHash);
+    return () => { window.removeEventListener("focus", onFocus); window.removeEventListener("hashchange", onHash); };
   }, []);
 
   // Debug
@@ -156,11 +158,11 @@ export default function PublicHome() {
         </p>
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
           {[
-            { label: "Jadwal Pelajaran", desc: "Real-time per unit", target: "#jadwal" },
+            { label: "Jadwal Pelajaran", desc: "Real-time per unit", target: "#jadwal", action: () => setShowJadwal(true) },
             { label: "Pengumuman", desc: "Update terbaru", target: "#pengumuman" },
             { label: "Berita & Artikel", desc: "Kegiatan sekolah", target: "#berita" },
           ].map((a) => (
-            <a key={a.label} href={a.target} className="rounded-2xl border border-border bg-card p-5 shadow-soft transition hover:shadow-md-soft">
+            <a key={a.label} href={a.target} onClick={() => a.action?.()} className="rounded-2xl border border-border bg-card p-5 shadow-soft transition hover:shadow-md-soft">
               <p className="font-bold">{a.label}</p>
               <p className="mt-1 text-xs text-muted-foreground">{a.desc}</p>
             </a>
@@ -174,8 +176,14 @@ export default function PublicHome() {
             <Badge variant="outline" className="border-primary text-primary"><Calendar className="mr-1 h-3 w-3" /> Jadwal</Badge>
             <h2 className="mt-2 font-display text-2xl font-bold md:text-3xl">Jadwal Pelajaran (Real-time)</h2>
             <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-              Data jadwal terbaru dari masing-masing unit. Diperbarui otomatis ketika admin mengubah data.
+              Klik tombol di bawah untuk menampilkan jadwal terbaru per unit.
             </p>
+            <div className="mt-4">
+              <Button onClick={() => setShowJadwal((v) => !v)} className="gradient-primary text-primary-foreground">
+                <Calendar className="mr-2 h-4 w-4" /> {showJadwal ? "Sembunyikan Jadwal" : "Tampilkan Jadwal"}
+              </Button>
+            </div>
+            {showJadwal && (
             <Tabs defaultValue="mi" className="mt-6">
               <TabsList>
                 <TabsTrigger value="mi">MI</TabsTrigger>
@@ -222,6 +230,7 @@ export default function PublicHome() {
                 );
               })}
             </Tabs>
+            )}
           </div>
         </section>
       </ErrorBoundary>
@@ -313,7 +322,7 @@ export default function PublicHome() {
 
       <ErrorBoundary silent label="Video">
         {youtubeId && (
-          <section className="bg-muted/40 py-14">
+          <section id="video" className="bg-muted/40 py-14">
             <div className="mx-auto max-w-5xl px-4 md:px-6">
               <h2 className="font-display text-2xl font-bold md:text-3xl">Video Profil</h2>
               <div className="mt-6 aspect-video overflow-hidden rounded-2xl shadow-soft">

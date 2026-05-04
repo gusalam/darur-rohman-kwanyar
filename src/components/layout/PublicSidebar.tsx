@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Home, Building2, BookOpen, GraduationCap, Briefcase, Calendar, Award,
-  Megaphone, Newspaper, Image as ImageIcon, ClipboardList, Phone, LogIn, Menu, X, ChevronDown,
+  Megaphone, Newspaper, Image as ImageIcon, ClipboardList, Phone, LogIn, Menu, X, ChevronDown, Video,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -32,7 +32,6 @@ const NAV: NavItem[] = [
   {
     label: "Akademik", icon: BookOpen, href: "#akademik",
     children: [
-      { label: "Jadwal", href: "#jadwal" },
       { label: "Pengumuman", href: "#pengumuman" },
     ],
   },
@@ -40,6 +39,7 @@ const NAV: NavItem[] = [
   { label: "PPDB", icon: ClipboardList, href: "#ppdb" },
   { label: "Berita & Artikel", icon: Newspaper, href: "#berita" },
   { label: "Galeri", icon: ImageIcon, href: "#galeri" },
+  { label: "Video Profil", icon: Video, href: "#video" },
   { label: "Kontak", icon: Phone, href: "#kontak" },
 ];
 
@@ -54,6 +54,10 @@ function SideNav({ onNavigate, yayasanName, tagline }: SideNavProps) {
   const handle = (href: string) => {
     onNavigate?.();
     if (href.startsWith("#")) {
+      if (window.location.hash !== href) {
+        window.history.replaceState(null, "", href);
+        window.dispatchEvent(new HashChangeEvent("hashchange"));
+      }
       setTimeout(() => {
         const el = document.querySelector(href);
         el?.scrollIntoView({ behavior: "smooth", block: "start" });
