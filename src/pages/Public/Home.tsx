@@ -6,11 +6,15 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useSupabaseTable } from "@/hooks/useSupabaseTable";
-import { GraduationCap, BookOpen, Briefcase, MapPin, Phone, Mail, Sparkles, ArrowRight, LogIn, Newspaper, Megaphone } from "lucide-react";
+import { listFiles } from "@/lib/storage";
+import { GraduationCap, BookOpen, Briefcase, MapPin, Phone, Mail, Sparkles, ArrowRight, LogIn, Newspaper, Megaphone, ImageIcon } from "lucide-react";
 import logo from "@/assets/logo-yayasan.png";
+
+const PLACEHOLDER = "/placeholder.svg";
 
 export default function PublicHome() {
   const [settings, setSettings] = useState<any>(null);
+  const [storageGallery, setStorageGallery] = useState<string[]>([]);
   const { data: banners } = useSupabaseTable<any>("cms_banners", { filters: { is_active: true }, orderBy: { column: "sort_order", ascending: true } });
   const { data: posts } = useSupabaseTable<any>("cms_posts", { filters: { status: "published" } });
   const { data: pages } = useSupabaseTable<any>("cms_pages", { filters: { is_published: true } });
@@ -23,10 +27,33 @@ export default function PublicHome() {
     return () => { supabase.removeChannel(ch); };
   }, []);
 
+  // Load gallery from the "galeri" storage bucket (where admins upload via CMS Galeri)
+  const loadGallery = async () => {
+    try {
+      const files = await listFiles("galeri");
+      setStorageGallery(files.map((f) => f.publicUrl));
+    } catch (e) {
+      console.error("Gagal load galeri:", e);
+    }
+  };
+  useEffect(() => {
+    loadGallery();
+    // Refresh gallery on window focus (storage doesn't have realtime)
+    const onFocus = () => loadGallery();
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
+  }, []);
+
+  // Debug
+  if (typeof window !== "undefined") {
+    console.log("[Home] banners:", banners.length, "posts:", posts.length, "gallery:", storageGallery.length);
+  }
+
   const pengumuman = posts.filter((p) => p.category === "pengumuman").slice(0, 3);
   const berita = posts.filter((p) => p.category !== "pengumuman").slice(0, 6);
-  const galleryPage = pages.find((p) => (p.gallery_urls ?? []).length > 0);
-  const gallery: string[] = galleryPage?.gallery_urls ?? [];
+  // Combine storage gallery + cms_pages gallery_urls
+  const pageGallery: string[] = pages.flatMap((p) => p.gallery_urls ?? []);
+  const gallery: string[] = Array.from(new Set([...storageGallery, ...pageGallery])).slice(0, 12);
 
   const youtubeId = (() => {
     const u = settings?.youtube_url;
@@ -74,11 +101,16 @@ export default function PublicHome() {
           <section className="bg-muted/40 py-10">
             <div className="mx-auto grid max-w-7xl gap-4 px-4 md:grid-cols-2 md:px-6">
               {banners.slice(1).map((b) => (
-                <a key={b.id} href={b.cta_url ?? "#"} className="group relative block h-44 overflow-hidden rounded-2xl shadow-soft">
-                  {b.image_url && <img src={b.image_url} alt={b.title} className="h-full w-full object-cover transition-transform group-hover:scale-105" />}
+                <a key={b.id} href={b.cta_url ?? "#"} className="group relative block h-44 overflow-hidden rounded-2xl bg-muted shadow-soft">
+                  <img
+                    src={b.image_url || PLACEHOLDER}
+                    alt={b.title || "Banner"}
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = PLACEHOLDER; }}
+                    className="h-full w-full object-cover transition-transform group-hover:scale-105"
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-5 text-white flex flex-col justify-end">
-                    <p className="font-bold">{b.title}</p>
-                    <p className="text-xs text-white/85">{b.subtitle}</p>
+                    {b.title && <p className="font-bold">{b.title}</p>}
+                    {b.subtitle && <p className="text-xs text-white/85">{b.subtitle}</p>}
                   </div>
                 </a>
               ))}
@@ -137,7 +169,20 @@ export default function PublicHome() {
               <div className="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
                 {berita.map((p) => (
                   <Card key={p.id} className="overflow-hidden rounded-2xl border-border shadow-soft">
-                    {p.cover_url && <div className="h-40 bg-muted"><img src={p.cover_url} alt={p.title} className="h-full w-full object-cover" /></div>}
+                    <div className="h-40 bg-muted">
+                      {p.cover_url ? (
+                        <img
+                          src={p.cover_url}
+                          alt={p.title}
+                          onError={(e) => { (e.currentTarget as HTMLImageElement).src = PLACEHOLDER; }}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+                          <ImageIcon className="h-8 w-8 opacity-40" />
+                        </div>
+                      )}
+                    </div>
                     <CardContent className="space-y-2 p-5">
                       <Badge className="bg-accent text-accent-foreground capitalize">{p.category}</Badge>
                       <h3 className="font-display text-lg font-bold">{p.title}</h3>
@@ -156,7 +201,15 @@ export default function PublicHome() {
           <section className="mx-auto max-w-7xl px-4 py-14 md:px-6">
             <h2 className="font-display text-2xl font-bold md:text-3xl">Galeri</h2>
             <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
-              {gallery.map((u) => <img key={u} src={u} alt="" className="aspect-square rounded-xl object-cover" />)}
+              {gallery.map((u) => (
+                <img
+                  key={u}
+                  src={u}
+                  alt="Galeri"
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = PLACEHOLDER; }}
+                  className="aspect-square rounded-xl bg-muted object-cover"
+                />
+              ))}
             </div>
           </section>
         )}
