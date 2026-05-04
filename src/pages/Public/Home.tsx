@@ -175,8 +175,14 @@ export default function PublicHome() {
             <Badge variant="outline" className="border-primary text-primary"><Calendar className="mr-1 h-3 w-3" /> Jadwal</Badge>
             <h2 className="mt-2 font-display text-2xl font-bold md:text-3xl">Jadwal Pelajaran (Real-time)</h2>
             <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-              Data jadwal terbaru dari masing-masing unit. Diperbarui otomatis ketika admin mengubah data.
+              Klik tombol di bawah untuk menampilkan jadwal terbaru per unit.
             </p>
+            <div className="mt-4">
+              <Button onClick={() => setShowJadwal((v) => !v)} className="gradient-primary text-primary-foreground">
+                <Calendar className="mr-2 h-4 w-4" /> {showJadwal ? "Sembunyikan Jadwal" : "Tampilkan Jadwal"}
+              </Button>
+            </div>
+            {showJadwal && (
             <Tabs defaultValue="mi" className="mt-6">
               <TabsList>
                 <TabsTrigger value="mi">MI</TabsTrigger>
@@ -223,6 +229,7 @@ export default function PublicHome() {
                 );
               })}
             </Tabs>
+            )}
           </div>
         </section>
       </ErrorBoundary>
