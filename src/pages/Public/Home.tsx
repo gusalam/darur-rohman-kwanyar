@@ -43,10 +43,11 @@ export default function PublicHome() {
   };
   useEffect(() => {
     loadGallery();
-    // Refresh gallery on window focus (storage doesn't have realtime)
     const onFocus = () => loadGallery();
+    const onHash = () => { if (window.location.hash === "#jadwal") setShowJadwal(true); };
     window.addEventListener("focus", onFocus);
-    return () => window.removeEventListener("focus", onFocus);
+    window.addEventListener("hashchange", onHash);
+    return () => { window.removeEventListener("focus", onFocus); window.removeEventListener("hashchange", onHash); };
   }, []);
 
   // Debug
