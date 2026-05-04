@@ -9,6 +9,7 @@ import { useSupabaseTable } from "@/hooks/useSupabaseTable";
 import { listFiles } from "@/lib/storage";
 import { GraduationCap, BookOpen, Briefcase, MapPin, Phone, Mail, Sparkles, ArrowRight, LogIn, Newspaper, Megaphone, ImageIcon } from "lucide-react";
 import logo from "@/assets/logo-yayasan.png";
+import { PublicSidebar, PublicMobileNavTrigger } from "@/components/layout/PublicSidebar";
 
 const PLACEHOLDER = "/placeholder.svg";
 
@@ -65,36 +66,39 @@ export default function PublicHome() {
   const heroBg = settings?.hero_image_url || banners[0]?.image_url;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white p-1 shadow-soft">
-              <img src={logo} alt="Logo" className="h-full w-full object-contain" />
-            </div>
-            <div className="hidden sm:block">
-              <p className="text-sm font-bold leading-tight">{settings?.nama_yayasan ?? "Yayasan Darul Rohman"}</p>
-              <p className="text-[11px] text-muted-foreground">{settings?.tagline ?? "Morombuh Kwanyar"}</p>
-            </div>
-          </Link>
-          <Link to="/login">
-            <Button className="gradient-primary text-primary-foreground"><LogIn className="mr-2 h-4 w-4" /> Login Admin</Button>
-          </Link>
-        </div>
-      </header>
+    <div id="top" className="min-h-screen bg-background text-foreground lg:flex">
+      <PublicSidebar yayasanName={settings?.nama_yayasan} tagline={settings?.tagline} />
 
-      <section className="relative overflow-hidden gradient-hero text-white">
-        {heroBg && <div className="absolute inset-0 opacity-30" style={{ backgroundImage: `url(${heroBg})`, backgroundSize: "cover", backgroundPosition: "center" }} />}
-        <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-24 md:px-6">
-          <Badge className="mb-4 border-0 bg-secondary text-secondary-foreground"><Sparkles className="mr-1 h-3 w-3" /> Sistem Terpadu Pendidikan</Badge>
-          <h1 className="font-display text-3xl font-bold md:text-5xl">{settings?.hero_title ?? "Membentuk Generasi Qur'ani, Cerdas & Berakhlak Mulia"}</h1>
-          <p className="mt-5 max-w-xl text-base text-white/90 md:text-lg">{settings?.hero_subtitle ?? settings?.deskripsi ?? "Yayasan Darul Rohman menyelenggarakan pendidikan Islam terpadu MI, SMP, SMK."}</p>
-          <div className="mt-7 flex flex-wrap gap-3">
-            <a href="#unit"><Button size="lg" className="bg-secondary text-secondary-foreground">Jelajahi Unit <ArrowRight className="ml-2 h-4 w-4" /></Button></a>
-            <a href="#kontak"><Button size="lg" variant="outline" className="border-white/40 bg-white/10 text-white hover:bg-white/20">Hubungi Kami</Button></a>
+      <div className="min-w-0 flex-1">
+        <header className="sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur lg:hidden">
+          <div className="flex h-16 items-center justify-between px-4">
+            <div className="flex items-center gap-2">
+              <PublicMobileNavTrigger yayasanName={settings?.nama_yayasan} tagline={settings?.tagline} />
+              <Link to="/" className="flex items-center gap-2">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white p-1 shadow-soft">
+                  <img src={logo} alt="Logo" className="h-full w-full object-contain" />
+                </div>
+                <p className="text-sm font-bold leading-tight">{settings?.nama_yayasan ?? "Darul Rohman"}</p>
+              </Link>
+            </div>
+            <Link to="/login">
+              <Button size="sm" className="gradient-primary text-primary-foreground"><LogIn className="mr-1.5 h-4 w-4" /> Login</Button>
+            </Link>
           </div>
-        </div>
-      </section>
+        </header>
+
+        <section id="tentang" className="relative overflow-hidden gradient-hero text-white">
+          {heroBg && <div className="absolute inset-0 opacity-30" style={{ backgroundImage: `url(${heroBg})`, backgroundSize: "cover", backgroundPosition: "center" }} />}
+          <div className="relative mx-auto max-w-6xl px-4 py-16 md:py-24 md:px-8">
+            <Badge className="mb-4 border-0 bg-secondary text-secondary-foreground"><Sparkles className="mr-1 h-3 w-3" /> Sistem Terpadu Pendidikan</Badge>
+            <h1 className="font-display text-3xl font-bold md:text-5xl">{settings?.hero_title ?? "Membentuk Generasi Qur'ani, Cerdas & Berakhlak Mulia"}</h1>
+            <p className="mt-5 max-w-xl text-base text-white/90 md:text-lg">{settings?.hero_subtitle ?? settings?.deskripsi ?? "Yayasan Darul Rohman menyelenggarakan pendidikan Islam terpadu MI, SMP, SMK."}</p>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <a href="#unit"><Button size="lg" className="bg-secondary text-secondary-foreground">Jelajahi Unit <ArrowRight className="ml-2 h-4 w-4" /></Button></a>
+              <a href="#kontak"><Button size="lg" variant="outline" className="border-white/40 bg-white/10 text-white hover:bg-white/20">Hubungi Kami</Button></a>
+            </div>
+          </div>
+        </section>
 
       <ErrorBoundary silent label="Banners">
         {banners.length > 1 && (
