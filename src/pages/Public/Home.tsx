@@ -135,7 +135,7 @@ export default function PublicHome() {
               { key: "smp", title: "SMP Darul Rohman", icon: GraduationCap, color: "gradient-sky", desc: settings?.deskripsi_smp },
               { key: "smk", title: "SMK Darul Rohman", icon: Briefcase, color: "gradient-gold", desc: settings?.deskripsi_smk },
             ].map((u) => (
-              <Card key={u.key} className="rounded-2xl border-border shadow-soft">
+              <Card key={u.key} id={`unit-${u.key}`} className="scroll-mt-20 rounded-2xl border-border shadow-soft">
                 <CardContent className="p-6">
                   <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${u.color} text-primary-foreground`}><u.icon className="h-7 w-7" /></div>
                   <h3 className="mt-4 font-display text-xl font-bold">{u.title}</h3>
@@ -143,6 +143,40 @@ export default function PublicHome() {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="akademik" className="mx-auto max-w-7xl px-4 py-14 md:px-6">
+        <Badge variant="outline" className="border-primary text-primary">Akademik</Badge>
+        <h2 className="mt-2 font-display text-2xl font-bold md:text-3xl">Informasi Akademik</h2>
+        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+          Jadwal pelajaran, pengumuman, dan informasi akademik terbaru dari setiap unit.
+          Login sebagai admin untuk mengelola data lengkap.
+        </p>
+        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          {[
+            { label: "Jadwal Pelajaran", desc: "Real-time per unit", target: "#pengumuman" },
+            { label: "Pengumuman", desc: "Update terbaru", target: "#pengumuman" },
+            { label: "Berita & Artikel", desc: "Kegiatan sekolah", target: "#berita" },
+          ].map((a) => (
+            <a key={a.label} href={a.target} className="rounded-2xl border border-border bg-card p-5 shadow-soft transition hover:shadow-md-soft">
+              <p className="font-bold">{a.label}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{a.desc}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section id="ppdb" className="bg-muted/40 py-14">
+        <div className="mx-auto max-w-7xl px-4 md:px-6">
+          <div className="rounded-3xl gradient-primary p-8 text-primary-foreground shadow-md-soft md:p-12">
+            <Badge className="border-0 bg-secondary text-secondary-foreground">PPDB</Badge>
+            <h2 className="mt-3 font-display text-2xl font-bold md:text-3xl">Penerimaan Peserta Didik Baru</h2>
+            <p className="mt-3 max-w-2xl text-sm text-primary-foreground/90">
+              Daftarkan putra-putri Anda di MI, SMP, atau SMK Darul Rohman. Hubungi kami untuk informasi pendaftaran.
+            </p>
+            <a href="#kontak"><Button size="lg" className="mt-5 bg-secondary text-secondary-foreground">Hubungi Pendaftaran <ArrowRight className="ml-2 h-4 w-4" /></Button></a>
           </div>
         </div>
       </section>
