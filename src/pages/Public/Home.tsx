@@ -79,11 +79,8 @@ export default function PublicHome() {
                   <img src={logo} alt="Logo" className="h-full w-full object-contain" />
                 </div>
                 <p className="text-sm font-bold leading-tight">{settings?.nama_yayasan ?? "Darul Rohman"}</p>
-              </Link>
-            </div>
-            <Link to="/login">
-              <Button size="sm" className="gradient-primary text-primary-foreground"><LogIn className="mr-1.5 h-4 w-4" /> Login</Button>
             </Link>
+            </div>
           </div>
         </header>
 
