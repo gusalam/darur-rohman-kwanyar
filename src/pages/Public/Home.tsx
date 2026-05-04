@@ -149,7 +149,7 @@ export default function PublicHome() {
 
       <ErrorBoundary silent label="Pengumuman">
         {pengumuman.length > 0 && (
-          <section className="mx-auto max-w-7xl px-4 py-14 md:px-6">
+          <section id="pengumuman" className="mx-auto max-w-7xl px-4 py-14 md:px-6">
             <Badge variant="outline"><Megaphone className="mr-1 h-3 w-3" /> Pengumuman</Badge>
             <h2 className="mt-2 font-display text-2xl font-bold md:text-3xl">Pengumuman Terbaru</h2>
             <div className="mt-6 grid gap-4 md:grid-cols-3">
@@ -166,7 +166,7 @@ export default function PublicHome() {
 
       <ErrorBoundary silent label="Berita">
         {berita.length > 0 && (
-          <section className="bg-muted/40 py-14">
+          <section id="berita" className="bg-muted/40 py-14">
             <div className="mx-auto max-w-7xl px-4 md:px-6">
               <Badge variant="outline"><Newspaper className="mr-1 h-3 w-3" /> Berita</Badge>
               <h2 className="mt-2 font-display text-2xl font-bold md:text-3xl">Berita & Artikel</h2>
@@ -202,7 +202,7 @@ export default function PublicHome() {
 
       <ErrorBoundary silent label="Galeri">
         {gallery.length > 0 && (
-          <section className="mx-auto max-w-7xl px-4 py-14 md:px-6">
+          <section id="galeri" className="mx-auto max-w-7xl px-4 py-14 md:px-6">
             <h2 className="font-display text-2xl font-bold md:text-3xl">Galeri</h2>
             <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
               {gallery.map((u) => (
