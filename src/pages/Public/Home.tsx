@@ -101,11 +101,16 @@ export default function PublicHome() {
           <section className="bg-muted/40 py-10">
             <div className="mx-auto grid max-w-7xl gap-4 px-4 md:grid-cols-2 md:px-6">
               {banners.slice(1).map((b) => (
-                <a key={b.id} href={b.cta_url ?? "#"} className="group relative block h-44 overflow-hidden rounded-2xl shadow-soft">
-                  {b.image_url && <img src={b.image_url} alt={b.title} className="h-full w-full object-cover transition-transform group-hover:scale-105" />}
+                <a key={b.id} href={b.cta_url ?? "#"} className="group relative block h-44 overflow-hidden rounded-2xl bg-muted shadow-soft">
+                  <img
+                    src={b.image_url || PLACEHOLDER}
+                    alt={b.title || "Banner"}
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).src = PLACEHOLDER; }}
+                    className="h-full w-full object-cover transition-transform group-hover:scale-105"
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-5 text-white flex flex-col justify-end">
-                    <p className="font-bold">{b.title}</p>
-                    <p className="text-xs text-white/85">{b.subtitle}</p>
+                    {b.title && <p className="font-bold">{b.title}</p>}
+                    {b.subtitle && <p className="text-xs text-white/85">{b.subtitle}</p>}
                   </div>
                 </a>
               ))}
@@ -164,7 +169,20 @@ export default function PublicHome() {
               <div className="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
                 {berita.map((p) => (
                   <Card key={p.id} className="overflow-hidden rounded-2xl border-border shadow-soft">
-                    {p.cover_url && <div className="h-40 bg-muted"><img src={p.cover_url} alt={p.title} className="h-full w-full object-cover" /></div>}
+                    <div className="h-40 bg-muted">
+                      {p.cover_url ? (
+                        <img
+                          src={p.cover_url}
+                          alt={p.title}
+                          onError={(e) => { (e.currentTarget as HTMLImageElement).src = PLACEHOLDER; }}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+                          <ImageIcon className="h-8 w-8 opacity-40" />
+                        </div>
+                      )}
+                    </div>
                     <CardContent className="space-y-2 p-5">
                       <Badge className="bg-accent text-accent-foreground capitalize">{p.category}</Badge>
                       <h3 className="font-display text-lg font-bold">{p.title}</h3>
@@ -183,7 +201,15 @@ export default function PublicHome() {
           <section className="mx-auto max-w-7xl px-4 py-14 md:px-6">
             <h2 className="font-display text-2xl font-bold md:text-3xl">Galeri</h2>
             <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
-              {gallery.map((u) => <img key={u} src={u} alt="" className="aspect-square rounded-xl object-cover" />)}
+              {gallery.map((u) => (
+                <img
+                  key={u}
+                  src={u}
+                  alt="Galeri"
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).src = PLACEHOLDER; }}
+                  className="aspect-square rounded-xl bg-muted object-cover"
+                />
+              ))}
             </div>
           </section>
         )}
