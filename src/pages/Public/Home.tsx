@@ -157,11 +157,11 @@ export default function PublicHome() {
         </p>
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
           {[
-            { label: "Jadwal Pelajaran", desc: "Real-time per unit", target: "#jadwal" },
+            { label: "Jadwal Pelajaran", desc: "Real-time per unit", target: "#jadwal", action: () => setShowJadwal(true) },
             { label: "Pengumuman", desc: "Update terbaru", target: "#pengumuman" },
             { label: "Berita & Artikel", desc: "Kegiatan sekolah", target: "#berita" },
           ].map((a) => (
-            <a key={a.label} href={a.target} className="rounded-2xl border border-border bg-card p-5 shadow-soft transition hover:shadow-md-soft">
+            <a key={a.label} href={a.target} onClick={() => a.action?.()} className="rounded-2xl border border-border bg-card p-5 shadow-soft transition hover:shadow-md-soft">
               <p className="font-bold">{a.label}</p>
               <p className="mt-1 text-xs text-muted-foreground">{a.desc}</p>
             </a>
