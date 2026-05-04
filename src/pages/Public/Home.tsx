@@ -7,9 +7,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useSupabaseTable } from "@/hooks/useSupabaseTable";
 import { listFiles } from "@/lib/storage";
-import { GraduationCap, BookOpen, Briefcase, MapPin, Phone, Mail, Sparkles, ArrowRight, LogIn, Newspaper, Megaphone, ImageIcon } from "lucide-react";
+import { GraduationCap, BookOpen, Briefcase, MapPin, Phone, Mail, Sparkles, ArrowRight, LogIn, Newspaper, Megaphone, ImageIcon, Calendar } from "lucide-react";
 import logo from "@/assets/logo-yayasan.png";
 import { PublicSidebar, PublicMobileNavTrigger } from "@/components/layout/PublicSidebar";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 const PLACEHOLDER = "/placeholder.png";
 
@@ -19,6 +21,7 @@ export default function PublicHome() {
   const { data: banners } = useSupabaseTable<any>("cms_banners", { filters: { is_active: true }, orderBy: { column: "sort_order", ascending: true } });
   const { data: posts } = useSupabaseTable<any>("cms_posts", { filters: { status: "published" } });
   const { data: pages } = useSupabaseTable<any>("cms_pages", { filters: { is_published: true } });
+  const { data: schedules } = useSupabaseTable<any>("schedules", { select: "*, classes(nama, unit), subjects(nama), teachers(nama)", orderBy: { column: "jam_mulai", ascending: true } });
 
   useEffect(() => {
     supabase.from("site_settings").select("*").limit(1).maybeSingle().then(({ data }) => setSettings(data));
@@ -153,7 +156,7 @@ export default function PublicHome() {
         </p>
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
           {[
-            { label: "Jadwal Pelajaran", desc: "Real-time per unit", target: "#pengumuman" },
+            { label: "Jadwal Pelajaran", desc: "Real-time per unit", target: "#jadwal" },
             { label: "Pengumuman", desc: "Update terbaru", target: "#pengumuman" },
             { label: "Berita & Artikel", desc: "Kegiatan sekolah", target: "#berita" },
           ].map((a) => (
@@ -164,6 +167,64 @@ export default function PublicHome() {
           ))}
         </div>
       </section>
+
+      <ErrorBoundary silent label="Jadwal">
+        <section id="jadwal" className="bg-card py-14">
+          <div className="mx-auto max-w-7xl px-4 md:px-6">
+            <Badge variant="outline" className="border-primary text-primary"><Calendar className="mr-1 h-3 w-3" /> Jadwal</Badge>
+            <h2 className="mt-2 font-display text-2xl font-bold md:text-3xl">Jadwal Pelajaran (Real-time)</h2>
+            <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+              Data jadwal terbaru dari masing-masing unit. Diperbarui otomatis ketika admin mengubah data.
+            </p>
+            <Tabs defaultValue="mi" className="mt-6">
+              <TabsList>
+                <TabsTrigger value="mi">MI</TabsTrigger>
+                <TabsTrigger value="smp">SMP</TabsTrigger>
+                <TabsTrigger value="smk">SMK</TabsTrigger>
+              </TabsList>
+              {(["mi", "smp", "smk"] as const).map((u) => {
+                const rows = schedules.filter((s: any) => s.unit === u).slice(0, 20);
+                return (
+                  <TabsContent key={u} value={u} className="mt-4">
+                    {rows.length === 0 ? (
+                      <p className="rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
+                        Belum ada jadwal untuk unit {u.toUpperCase()}.
+                      </p>
+                    ) : (
+                      <div className="overflow-x-auto rounded-2xl border border-border shadow-soft">
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead>Hari</TableHead>
+                              <TableHead>Jam</TableHead>
+                              <TableHead>Kelas</TableHead>
+                              <TableHead>Mata Pelajaran</TableHead>
+                              <TableHead>Guru</TableHead>
+                              <TableHead>Ruang</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {rows.map((s: any) => (
+                              <TableRow key={s.id}>
+                                <TableCell className="font-medium">{s.hari}</TableCell>
+                                <TableCell>{(s.jam_mulai ?? "").slice(0, 5)}–{(s.jam_selesai ?? "").slice(0, 5)}</TableCell>
+                                <TableCell>{s.classes?.nama ?? "-"}</TableCell>
+                                <TableCell>{s.subjects?.nama ?? "-"}</TableCell>
+                                <TableCell>{s.teachers?.nama ?? "-"}</TableCell>
+                                <TableCell>{s.ruangan ?? "-"}</TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </div>
+                    )}
+                  </TabsContent>
+                );
+              })}
+            </Tabs>
+          </div>
+        </section>
+      </ErrorBoundary>
 
       <section id="ppdb" className="bg-muted/40 py-14">
         <div className="mx-auto max-w-7xl px-4 md:px-6">
