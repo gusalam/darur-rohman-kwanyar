@@ -256,6 +256,7 @@ export default function PublicHome() {
           <p>Sistem Terpadu Pendidikan v1.0</p>
         </div>
       </footer>
+      </div>
     </div>
   );
 }
