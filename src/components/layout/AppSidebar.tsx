@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import {
   LayoutDashboard, GraduationCap, Calendar, ClipboardCheck, Award,
   Wallet, Building2, BookOpen, Newspaper, Image as ImageIcon,
-  FilePen, ScrollText, Library, Settings, School, Briefcase, ImagePlus,
+  FilePen, ScrollText, Library, Settings, School, Briefcase, ImagePlus, UserCog, UserPlus,
 } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
@@ -18,6 +18,7 @@ const UNIT_ADMINS: Role[] = ["admin_mi", "admin_smp", "admin_smk"];
 
 const akademikItems: NavItem[] = [
   { title: "Siswa", url: "/siswa", icon: GraduationCap, roles: ALL },
+  { title: "Guru & Staff", url: "/guru", icon: UserCog, roles: ALL },
   { title: "Kelas", url: "/kelas", icon: School, roles: ALL },
   { title: "Mata Pelajaran", url: "/mapel", icon: BookOpen, roles: ALL },
   { title: "Jadwal", url: "/jadwal", icon: Calendar, roles: ALL },
@@ -27,6 +28,7 @@ const akademikItems: NavItem[] = [
 ];
 const manajemenItems: NavItem[] = [
   { title: "Keuangan", url: "/keuangan", icon: Wallet, roles: ALL },
+  { title: "PPDB", url: "/ppdb", icon: UserPlus, roles: ALL },
 ];
 const cmsItems: NavItem[] = [
   { title: "Posts", url: "/cms/posts", icon: Newspaper, roles: ["super_admin"] },
