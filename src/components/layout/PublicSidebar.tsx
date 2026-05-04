@@ -32,10 +32,11 @@ const NAV: NavItem[] = [
   {
     label: "Akademik", icon: BookOpen, href: "#akademik",
     children: [
-      { label: "Jadwal", href: "#akademik" },
+      { label: "Jadwal", href: "#jadwal" },
       { label: "Pengumuman", href: "#pengumuman" },
     ],
   },
+  { label: "Jadwal", icon: Calendar, href: "#jadwal" },
   { label: "PPDB", icon: ClipboardList, href: "#ppdb" },
   { label: "Berita & Artikel", icon: Newspaper, href: "#berita" },
   { label: "Galeri", icon: ImageIcon, href: "#galeri" },
