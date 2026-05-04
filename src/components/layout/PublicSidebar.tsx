@@ -54,6 +54,10 @@ function SideNav({ onNavigate, yayasanName, tagline }: SideNavProps) {
   const handle = (href: string) => {
     onNavigate?.();
     if (href.startsWith("#")) {
+      if (window.location.hash !== href) {
+        window.history.replaceState(null, "", href);
+        window.dispatchEvent(new HashChangeEvent("hashchange"));
+      }
       setTimeout(() => {
         const el = document.querySelector(href);
         el?.scrollIntoView({ behavior: "smooth", block: "start" });
