@@ -17,6 +17,7 @@ const PLACEHOLDER = "/placeholder.png";
 
 export default function PublicHome() {
   const [settings, setSettings] = useState<any>(null);
+  const [showJadwal, setShowJadwal] = useState(false);
   const [storageGallery, setStorageGallery] = useState<string[]>([]);
   const { data: banners } = useSupabaseTable<any>("cms_banners", { filters: { is_active: true }, orderBy: { column: "sort_order", ascending: true } });
   const { data: posts } = useSupabaseTable<any>("cms_posts", { filters: { status: "published" } });
