@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Home, Building2, BookOpen, GraduationCap, Briefcase, Calendar, Award,
-  Megaphone, Newspaper, Image as ImageIcon, ClipboardList, Phone, LogIn, Menu, X, ChevronDown,
+  Megaphone, Newspaper, Image as ImageIcon, ClipboardList, Phone, LogIn, Menu, X, ChevronDown, Video,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
