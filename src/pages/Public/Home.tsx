@@ -6,11 +6,15 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useSupabaseTable } from "@/hooks/useSupabaseTable";
-import { GraduationCap, BookOpen, Briefcase, MapPin, Phone, Mail, Sparkles, ArrowRight, LogIn, Newspaper, Megaphone } from "lucide-react";
+import { listFiles } from "@/lib/storage";
+import { GraduationCap, BookOpen, Briefcase, MapPin, Phone, Mail, Sparkles, ArrowRight, LogIn, Newspaper, Megaphone, ImageIcon } from "lucide-react";
 import logo from "@/assets/logo-yayasan.png";
+
+const PLACEHOLDER = "/placeholder.svg";
 
 export default function PublicHome() {
   const [settings, setSettings] = useState<any>(null);
+  const [storageGallery, setStorageGallery] = useState<string[]>([]);
   const { data: banners } = useSupabaseTable<any>("cms_banners", { filters: { is_active: true }, orderBy: { column: "sort_order", ascending: true } });
   const { data: posts } = useSupabaseTable<any>("cms_posts", { filters: { status: "published" } });
   const { data: pages } = useSupabaseTable<any>("cms_pages", { filters: { is_published: true } });
@@ -23,10 +27,33 @@ export default function PublicHome() {
     return () => { supabase.removeChannel(ch); };
   }, []);
 
+  // Load gallery from the "galeri" storage bucket (where admins upload via CMS Galeri)
+  const loadGallery = async () => {
+    try {
+      const files = await listFiles("galeri");
+      setStorageGallery(files.map((f) => f.publicUrl));
+    } catch (e) {
+      console.error("Gagal load galeri:", e);
+    }
+  };
+  useEffect(() => {
+    loadGallery();
+    // Refresh gallery on window focus (storage doesn't have realtime)
+    const onFocus = () => loadGallery();
+    window.addEventListener("focus", onFocus);
+    return () => window.removeEventListener("focus", onFocus);
+  }, []);
+
+  // Debug
+  if (typeof window !== "undefined") {
+    console.log("[Home] banners:", banners.length, "posts:", posts.length, "gallery:", storageGallery.length);
+  }
+
   const pengumuman = posts.filter((p) => p.category === "pengumuman").slice(0, 3);
   const berita = posts.filter((p) => p.category !== "pengumuman").slice(0, 6);
-  const galleryPage = pages.find((p) => (p.gallery_urls ?? []).length > 0);
-  const gallery: string[] = galleryPage?.gallery_urls ?? [];
+  // Combine storage gallery + cms_pages gallery_urls
+  const pageGallery: string[] = pages.flatMap((p) => p.gallery_urls ?? []);
+  const gallery: string[] = Array.from(new Set([...storageGallery, ...pageGallery])).slice(0, 12);
 
   const youtubeId = (() => {
     const u = settings?.youtube_url;
