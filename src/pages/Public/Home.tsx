@@ -321,7 +321,7 @@ export default function PublicHome() {
 
       <ErrorBoundary silent label="Video">
         {youtubeId && (
-          <section className="bg-muted/40 py-14">
+          <section id="video" className="bg-muted/40 py-14">
             <div className="mx-auto max-w-5xl px-4 md:px-6">
               <h2 className="font-display text-2xl font-bold md:text-3xl">Video Profil</h2>
               <div className="mt-6 aspect-video overflow-hidden rounded-2xl shadow-soft">
