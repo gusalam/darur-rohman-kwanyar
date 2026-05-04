@@ -11,7 +11,7 @@ import { GraduationCap, BookOpen, Briefcase, MapPin, Phone, Mail, Sparkles, Arro
 import logo from "@/assets/logo-yayasan.png";
 import { PublicSidebar, PublicMobileNavTrigger } from "@/components/layout/PublicSidebar";
 
-const PLACEHOLDER = "/placeholder.svg";
+const PLACEHOLDER = "/placeholder.png";
 
 export default function PublicHome() {
   const [settings, setSettings] = useState<any>(null);
