@@ -53,7 +53,9 @@ const App = () => (
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<PublicHome />} />
+                <Route path="/berita/:slug" element={<PostDetail />} />
                 <Route path="/login" element={<Login />} />
+
 
                 <Route element={<ProtectedRoute />}>
                   <Route path="/dashboard" element={<DashboardIndexRedirect />} />
