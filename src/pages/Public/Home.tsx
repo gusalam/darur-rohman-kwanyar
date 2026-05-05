@@ -71,23 +71,10 @@ export default function PublicHome() {
   const heroBg = settings?.hero_image_url || banners[0]?.image_url;
 
   return (
-    <div id="top" className="min-h-screen bg-background text-foreground lg:flex">
-      <PublicSidebar yayasanName={settings?.nama_yayasan} tagline={settings?.tagline} />
+    <div id="top" className="min-h-screen bg-background text-foreground">
+      <PublicNavbar yayasanName={settings?.nama_yayasan} tagline={settings?.tagline} />
 
-      <div className="min-w-0 flex-1">
-        <header className="sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur lg:hidden">
-          <div className="flex h-16 items-center justify-between px-4">
-            <div className="flex items-center gap-2">
-              <PublicMobileNavTrigger yayasanName={settings?.nama_yayasan} tagline={settings?.tagline} />
-              <Link to="/" className="flex items-center gap-2">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white p-1 shadow-soft">
-                  <img src={logo} alt="Logo" className="h-full w-full object-contain" />
-                </div>
-                <p className="text-sm font-bold leading-tight">{settings?.nama_yayasan ?? "Darul Rohman"}</p>
-            </Link>
-            </div>
-          </div>
-        </header>
+      <div className="min-w-0">
 
         <section id="tentang" className="relative overflow-hidden gradient-hero text-white">
           {heroBg && <div className="absolute inset-0 opacity-30" style={{ backgroundImage: `url(${heroBg})`, backgroundSize: "cover", backgroundPosition: "center" }} />}
