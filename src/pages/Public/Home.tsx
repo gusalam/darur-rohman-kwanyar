@@ -9,7 +9,7 @@ import { useSupabaseTable } from "@/hooks/useSupabaseTable";
 import { listFiles } from "@/lib/storage";
 import { GraduationCap, BookOpen, Briefcase, MapPin, Phone, Mail, Sparkles, ArrowRight, LogIn, Newspaper, Megaphone, ImageIcon, Calendar } from "lucide-react";
 import logo from "@/assets/logo-yayasan.png";
-import { PublicSidebar, PublicMobileNavTrigger } from "@/components/layout/PublicSidebar";
+import { PublicNavbar } from "@/components/layout/PublicNavbar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
