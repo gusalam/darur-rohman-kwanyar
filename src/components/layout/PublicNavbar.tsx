@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, LogIn } from "lucide-react";
+import { Menu, LogIn, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import logo from "@/assets/logo-yayasan.png";
 
 const NAV = [
-  { label: "Beranda", href: "#top" },
+  { label: "Home", href: "#top" },
   { label: "Tentang", href: "#tentang" },
   { label: "Unit", href: "#unit" },
   { label: "Akademik", href: "#akademik" },
-  { label: "Jadwal", href: "#jadwal" },
   { label: "PPDB", href: "#ppdb" },
   { label: "Berita", href: "#berita" },
   { label: "Galeri", href: "#galeri" },
@@ -34,70 +34,98 @@ function goTo(href: string) {
   }
 }
 
+function handleSearch(e: React.FormEvent<HTMLFormElement>) {
+  e.preventDefault();
+  const form = e.currentTarget;
+  const q = (new FormData(form).get("q") as string)?.trim();
+  if (!q) return;
+  goTo("#berita");
+  form.reset();
+}
+
 export function PublicNavbar({ yayasanName, tagline }: Props) {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
-      <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 md:px-6">
+    <header className="sticky top-0 z-40 w-full bg-sidebar text-white shadow-soft">
+      <div className="mx-auto flex h-[70px] max-w-7xl items-center gap-6 px-4 md:px-6">
+        {/* Logo */}
         <Link to="/" className="flex items-center gap-2 shrink-0">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white p-1 shadow-soft">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white p-1">
             <img src={logo} alt="Logo" className="h-full w-full object-contain" />
           </div>
           <div className="min-w-0 hidden sm:block">
-            <p className="truncate text-sm font-bold leading-tight">{yayasanName ?? "Darul Rohman"}</p>
-            {tagline && <p className="truncate text-[11px] text-muted-foreground">{tagline}</p>}
+            <p className="truncate text-sm font-bold leading-tight">{yayasanName ?? "Yayasan Darul Rohman"}</p>
+            {tagline && <p className="truncate text-[11px] text-white/70">{tagline}</p>}
           </div>
         </Link>
 
-        <nav className="ml-auto hidden lg:flex items-center gap-1">
+        {/* Desktop menu */}
+        <nav className="mx-auto hidden lg:flex items-center gap-6 xl:gap-8">
           {NAV.map((n) => (
             <button
               key={n.label}
               onClick={() => goTo(n.href)}
-              className="rounded-md px-3 py-2 text-sm font-medium text-foreground/80 transition hover:bg-muted hover:text-foreground"
+              className="relative text-sm font-medium text-white/90 transition-colors duration-200 hover:text-secondary after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-secondary after:transition-all after:duration-200 hover:after:w-full"
             >
               {n.label}
             </button>
           ))}
         </nav>
 
-        <div className="ml-auto lg:ml-2 flex items-center gap-2">
+        {/* Right: search + login */}
+        <div className="ml-auto flex items-center gap-3">
+          <form onSubmit={handleSearch} className="relative hidden md:block">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/60" />
+            <Input
+              name="q"
+              placeholder="Cari…"
+              className="h-10 w-40 xl:w-56 rounded-lg border-white/20 bg-white/10 pl-9 text-sm text-white placeholder:text-white/60 focus-visible:ring-secondary"
+            />
+          </form>
+
           <Link to="/login" className="hidden sm:block">
             <Button className="bg-secondary text-secondary-foreground font-bold hover:opacity-95">
               <LogIn className="mr-2 h-4 w-4" /> Login Admin
             </Button>
           </Link>
 
+          {/* Mobile hamburger */}
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <Button size="icon" variant="ghost" className="lg:hidden" aria-label="Buka menu">
+              <Button size="icon" variant="ghost" className="lg:hidden text-white hover:bg-white/10 hover:text-white" aria-label="Buka menu">
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-72 p-0">
+            <SheetContent side="right" className="w-72 border-0 bg-sidebar p-0 text-white">
               <div className="flex h-full flex-col">
-                <div className="flex items-center gap-3 border-b border-border p-4">
+                <div className="flex items-center gap-3 border-b border-white/10 p-4">
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white p-1">
                     <img src={logo} alt="Logo" className="h-full w-full object-contain" />
                   </div>
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-bold">{yayasanName ?? "Darul Rohman"}</p>
-                    {tagline && <p className="truncate text-[11px] text-muted-foreground">{tagline}</p>}
+                    <p className="truncate text-sm font-bold">{yayasanName ?? "Yayasan Darul Rohman"}</p>
+                    {tagline && <p className="truncate text-[11px] text-white/70">{tagline}</p>}
                   </div>
+                </div>
+                <div className="border-b border-white/10 p-3">
+                  <form onSubmit={(e) => { handleSearch(e); setOpen(false); }} className="relative">
+                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/60" />
+                    <Input name="q" placeholder="Cari…" className="h-10 rounded-lg border-white/20 bg-white/10 pl-9 text-white placeholder:text-white/60" />
+                  </form>
                 </div>
                 <nav className="flex-1 space-y-1 overflow-y-auto p-3">
                   {NAV.map((n) => (
                     <button
                       key={n.label}
                       onClick={() => { setOpen(false); goTo(n.href); }}
-                      className="block w-full rounded-md px-3 py-2.5 text-left text-sm font-semibold text-foreground transition hover:bg-muted"
+                      className="block w-full rounded-md px-3 py-2.5 text-left text-sm font-semibold text-white transition hover:bg-white/10 hover:text-secondary"
                     >
                       {n.label}
                     </button>
                   ))}
                 </nav>
-                <div className="border-t border-border p-3">
+                <div className="border-t border-white/10 p-3">
                   <Link to="/login" onClick={() => setOpen(false)}>
                     <Button className="w-full bg-secondary text-secondary-foreground font-bold">
                       <LogIn className="mr-2 h-4 w-4" /> Login Admin
