@@ -83,10 +83,12 @@ export default function CmsSiteSettings() {
 
           <div className="border-t border-border pt-4">
             <h3 className="mb-3 font-display text-lg font-bold">Deskripsi Unit</h3>
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-              <Field label="MI"><Textarea rows={3} value={row.deskripsi_mi ?? ""} onChange={(e) => setRow({ ...row, deskripsi_mi: e.target.value })} /></Field>
-              <Field label="SMP"><Textarea rows={3} value={row.deskripsi_smp ?? ""} onChange={(e) => setRow({ ...row, deskripsi_smp: e.target.value })} /></Field>
-              <Field label="SMK"><Textarea rows={3} value={row.deskripsi_smk ?? ""} onChange={(e) => setRow({ ...row, deskripsi_smk: e.target.value })} /></Field>
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+              <Field label="MI An-Nuriyah"><Textarea rows={3} value={row.deskripsi_mi ?? ""} onChange={(e) => setRow({ ...row, deskripsi_mi: e.target.value })} /></Field>
+              <Field label="SMP Darul Rohman"><Textarea rows={3} value={row.deskripsi_smp ?? ""} onChange={(e) => setRow({ ...row, deskripsi_smp: e.target.value })} /></Field>
+              <Field label="SMK Darul Rohman"><Textarea rows={3} value={row.deskripsi_smk ?? ""} onChange={(e) => setRow({ ...row, deskripsi_smk: e.target.value })} /></Field>
+              <Field label="Madrasah Diniyah Al Arsyadiyah"><Textarea rows={3} value={row.deskripsi_madrasah ?? ""} onChange={(e) => setRow({ ...row, deskripsi_madrasah: e.target.value })} /></Field>
+              <Field label="TK PGRI 02 Roudlotul Huffadz"><Textarea rows={3} value={row.deskripsi_tk ?? ""} onChange={(e) => setRow({ ...row, deskripsi_tk: e.target.value })} /></Field>
             </div>
           </div>
         </CardContent>

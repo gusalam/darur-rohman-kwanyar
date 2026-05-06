@@ -42,7 +42,7 @@ export default function Yayasan() {
                   <span className="font-mono font-bold text-primary">{total} siswa</span>
                 </div>
                 <div className="h-6 overflow-hidden rounded-xl bg-muted">
-                  <div className={`h-full transition-all duration-700 ${k === "mi" ? "gradient-primary" : k === "smp" ? "gradient-sky" : "gradient-gold"}`} style={{ width: `${pct}%` }} />
+                  <div className={`h-full transition-all duration-700 ${k === "mi" ? "gradient-primary" : k === "smp" ? "gradient-sky" : k === "smk" ? "gradient-gold" : "gradient-primary"}`} style={{ width: `${pct}%` }} />
                 </div>
               </div>
             );

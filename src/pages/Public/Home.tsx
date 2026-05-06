@@ -81,7 +81,7 @@ export default function PublicHome() {
           <div className="relative mx-auto max-w-6xl px-4 py-16 md:py-24 md:px-8">
             <Badge className="mb-4 border-0 bg-secondary text-secondary-foreground"><Sparkles className="mr-1 h-3 w-3" /> Sistem Terpadu Pendidikan</Badge>
             <h1 className="font-display text-3xl font-bold md:text-5xl">{settings?.hero_title ?? "Membentuk Generasi Qur'ani, Cerdas & Berakhlak Mulia"}</h1>
-            <p className="mt-5 max-w-xl text-base text-white/90 md:text-lg">{settings?.hero_subtitle ?? settings?.deskripsi ?? "Yayasan Darul Rohman menyelenggarakan pendidikan Islam terpadu MI, SMP, SMK."}</p>
+            <p className="mt-5 max-w-xl text-base text-white/90 md:text-lg">{settings?.hero_subtitle ?? settings?.deskripsi ?? "Yayasan Darul Rohman menyelenggarakan pendidikan Islam terpadu MI, SMP, SMK, Madrasah Diniyah, dan TK."}</p>
             <div className="mt-7 flex flex-wrap gap-3">
               <a href="#unit"><Button size="lg" className="bg-secondary text-secondary-foreground">Jelajahi Unit <ArrowRight className="ml-2 h-4 w-4" /></Button></a>
               <a href="#kontak"><Button size="lg" variant="outline" className="border-white/40 bg-white/10 text-white hover:bg-white/20">Hubungi Kami</Button></a>
@@ -184,12 +184,14 @@ export default function PublicHome() {
             </div>
             {showJadwal && (
             <Tabs defaultValue="mi" className="mt-6">
-              <TabsList>
+              <TabsList className="flex-wrap">
                 <TabsTrigger value="mi">MI</TabsTrigger>
                 <TabsTrigger value="smp">SMP</TabsTrigger>
                 <TabsTrigger value="smk">SMK</TabsTrigger>
+                <TabsTrigger value="madrasah">Madrasah</TabsTrigger>
+                <TabsTrigger value="tk">TK</TabsTrigger>
               </TabsList>
-              {(["mi", "smp", "smk"] as const).map((u) => {
+              {(["mi", "smp", "smk", "madrasah", "tk"] as const).map((u) => {
                 const rows = schedules.filter((s: any) => s.unit === u).slice(0, 20);
                 return (
                   <TabsContent key={u} value={u} className="mt-4">
@@ -240,7 +242,7 @@ export default function PublicHome() {
             <Badge className="border-0 bg-secondary text-secondary-foreground">PPDB</Badge>
             <h2 className="mt-3 font-display text-2xl font-bold md:text-3xl">Penerimaan Peserta Didik Baru</h2>
             <p className="mt-3 max-w-2xl text-sm text-primary-foreground/90">
-              Daftarkan putra-putri Anda di MI, SMP, atau SMK Darul Rohman. Hubungi kami untuk informasi pendaftaran.
+              Daftarkan putra-putri Anda di MI An-Nuriyah, SMP/SMK Darul Rohman, Madrasah Diniyah Al Arsyadiyah, atau TK PGRI 02 Roudlotul Huffadz. Hubungi kami untuk informasi pendaftaran.
             </p>
             <a href="#kontak"><Button size="lg" className="mt-5 bg-secondary text-secondary-foreground">Hubungi Pendaftaran <ArrowRight className="ml-2 h-4 w-4" /></Button></a>
           </div>
