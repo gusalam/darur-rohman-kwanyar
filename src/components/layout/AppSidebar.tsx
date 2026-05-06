@@ -8,6 +8,7 @@ import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
   SidebarMenu, SidebarMenuItem, useSidebar, SidebarHeader, SidebarFooter,
 } from "@/components/ui/sidebar";
+import { useAuth } from "@/context/AuthContext";
 import { ROLE_LABEL, Role, logoForRole, UNITS } from "@/lib/units";
 
 interface NavItem { title: string; url: string; icon: any; roles: Role[]; }
