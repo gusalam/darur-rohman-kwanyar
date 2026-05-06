@@ -52,7 +52,7 @@ export function PublicNavbar({ yayasanName, tagline }: Props) {
         </Link>
 
         {/* Desktop menu */}
-        <nav className="mx-auto hidden lg:flex items-center gap-6 xl:gap-8">
+        <nav className="mx-auto hidden md:flex items-center gap-6 lg:gap-8">
           {NAV.map((n) => (
             <button
               key={n.label}
@@ -75,7 +75,7 @@ export function PublicNavbar({ yayasanName, tagline }: Props) {
           {/* Mobile hamburger */}
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <Button size="icon" variant="ghost" className="lg:hidden text-white hover:bg-white/10 hover:text-white" aria-label="Buka menu">
+              <Button size="icon" variant="ghost" className="md:hidden text-white hover:bg-white/10 hover:text-white" aria-label="Buka menu">
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
