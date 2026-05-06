@@ -491,9 +491,11 @@ export type Database = {
           alamat: string | null
           created_at: string
           deskripsi: string | null
+          deskripsi_madrasah: string | null
           deskripsi_mi: string | null
           deskripsi_smk: string | null
           deskripsi_smp: string | null
+          deskripsi_tk: string | null
           email: string | null
           hero_image_url: string | null
           hero_subtitle: string | null
@@ -511,9 +513,11 @@ export type Database = {
           alamat?: string | null
           created_at?: string
           deskripsi?: string | null
+          deskripsi_madrasah?: string | null
           deskripsi_mi?: string | null
           deskripsi_smk?: string | null
           deskripsi_smp?: string | null
+          deskripsi_tk?: string | null
           email?: string | null
           hero_image_url?: string | null
           hero_subtitle?: string | null
@@ -531,9 +535,11 @@ export type Database = {
           alamat?: string | null
           created_at?: string
           deskripsi?: string | null
+          deskripsi_madrasah?: string | null
           deskripsi_mi?: string | null
           deskripsi_smk?: string | null
           deskripsi_smp?: string | null
+          deskripsi_tk?: string | null
           email?: string | null
           hero_image_url?: string | null
           hero_subtitle?: string | null
