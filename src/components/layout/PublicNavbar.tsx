@@ -33,14 +33,6 @@ function goTo(href: string) {
   }
 }
 
-function handleSearch(e: React.FormEvent<HTMLFormElement>) {
-  e.preventDefault();
-  const form = e.currentTarget;
-  const q = (new FormData(form).get("q") as string)?.trim();
-  if (!q) return;
-  goTo("#berita");
-  form.reset();
-}
 
 export function PublicNavbar({ yayasanName, tagline }: Props) {
   const [open, setOpen] = useState(false);
