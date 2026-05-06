@@ -8,13 +8,11 @@ import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
   SidebarMenu, SidebarMenuItem, useSidebar, SidebarHeader, SidebarFooter,
 } from "@/components/ui/sidebar";
-import logo from "@/assets/logo-yayasan.png";
-import { useAuth } from "@/context/AuthContext";
-import { ROLE_LABEL, Role, UnitKey } from "@/lib/units";
+import { ROLE_LABEL, Role, logoForRole, UNITS } from "@/lib/units";
 
 interface NavItem { title: string; url: string; icon: any; roles: Role[]; }
-const ALL: Role[] = ["super_admin", "admin_mi", "admin_smp", "admin_smk"];
-const UNIT_ADMINS: Role[] = ["admin_mi", "admin_smp", "admin_smk"];
+const ALL: Role[] = ["super_admin", "admin_mi", "admin_smp", "admin_smk", "admin_madrasah", "admin_tk"];
+const UNIT_ADMINS: Role[] = ["admin_mi", "admin_smp", "admin_smk", "admin_madrasah", "admin_tk"];
 
 const akademikItems: NavItem[] = [
   { title: "Siswa", url: "/siswa", icon: GraduationCap, roles: ALL },

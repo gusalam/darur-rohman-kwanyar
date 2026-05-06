@@ -6,7 +6,7 @@ import { ROLE_LABEL } from "@/lib/units";
 import { StatCard, PageHeader } from "@/components/shared/StatCard";
 import { useSupabaseTable } from "@/hooks/useSupabaseTable";
 import { GraduationCap, Users, BookOpen, Wallet, Sparkles, Newspaper } from "lucide-react";
-import logo from "@/assets/logo-yayasan.png";
+// Logo diambil dari info unit aktif
 
 export default function Dashboard() {
   const { info, unit } = useUnit();
@@ -24,7 +24,7 @@ export default function Dashboard() {
       <div className="relative overflow-hidden rounded-2xl gradient-hero p-6 shadow-md-soft md:p-8">
         <div className="flex items-center gap-4">
           <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white p-1 md:h-20 md:w-20">
-            <img src={logo} alt="Logo" className="h-full w-full object-contain" />
+            <img src={info.logo} alt={`Logo ${info.short}`} className="h-full w-full object-contain" />
           </div>
           <div className="text-white">
             <Badge className="mb-2 border-0 bg-secondary text-secondary-foreground">
