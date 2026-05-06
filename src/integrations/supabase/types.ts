@@ -491,9 +491,11 @@ export type Database = {
           alamat: string | null
           created_at: string
           deskripsi: string | null
+          deskripsi_madrasah: string | null
           deskripsi_mi: string | null
           deskripsi_smk: string | null
           deskripsi_smp: string | null
+          deskripsi_tk: string | null
           email: string | null
           hero_image_url: string | null
           hero_subtitle: string | null
@@ -511,9 +513,11 @@ export type Database = {
           alamat?: string | null
           created_at?: string
           deskripsi?: string | null
+          deskripsi_madrasah?: string | null
           deskripsi_mi?: string | null
           deskripsi_smk?: string | null
           deskripsi_smp?: string | null
+          deskripsi_tk?: string | null
           email?: string | null
           hero_image_url?: string | null
           hero_subtitle?: string | null
@@ -531,9 +535,11 @@ export type Database = {
           alamat?: string | null
           created_at?: string
           deskripsi?: string | null
+          deskripsi_madrasah?: string | null
           deskripsi_mi?: string | null
           deskripsi_smk?: string | null
           deskripsi_smp?: string | null
+          deskripsi_tk?: string | null
           email?: string | null
           hero_image_url?: string | null
           hero_subtitle?: string | null
@@ -769,8 +775,14 @@ export type Database = {
       is_super_admin: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      app_role: "super_admin" | "admin_mi" | "admin_smp" | "admin_smk"
-      unit_key: "mi" | "smp" | "smk"
+      app_role:
+        | "super_admin"
+        | "admin_mi"
+        | "admin_smp"
+        | "admin_smk"
+        | "admin_madrasah"
+        | "admin_tk"
+      unit_key: "mi" | "smp" | "smk" | "madrasah" | "tk"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -898,8 +910,15 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["super_admin", "admin_mi", "admin_smp", "admin_smk"],
-      unit_key: ["mi", "smp", "smk"],
+      app_role: [
+        "super_admin",
+        "admin_mi",
+        "admin_smp",
+        "admin_smk",
+        "admin_madrasah",
+        "admin_tk",
+      ],
+      unit_key: ["mi", "smp", "smk", "madrasah", "tk"],
     },
   },
 } as const

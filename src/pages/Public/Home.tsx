@@ -7,8 +7,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useSupabaseTable } from "@/hooks/useSupabaseTable";
 import { listFiles } from "@/lib/storage";
-import { GraduationCap, BookOpen, Briefcase, MapPin, Phone, Mail, Sparkles, ArrowRight, LogIn, Newspaper, Megaphone, ImageIcon, Calendar } from "lucide-react";
-import logo from "@/assets/logo-yayasan.png";
+import { GraduationCap, BookOpen, Briefcase, MapPin, Phone, Mail, Sparkles, ArrowRight, LogIn, Newspaper, Megaphone, ImageIcon, Calendar, School, Sprout } from "lucide-react";
+import { UNITS } from "@/lib/units";
 import { PublicNavbar } from "@/components/layout/PublicNavbar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -81,7 +81,7 @@ export default function PublicHome() {
           <div className="relative mx-auto max-w-6xl px-4 py-16 md:py-24 md:px-8">
             <Badge className="mb-4 border-0 bg-secondary text-secondary-foreground"><Sparkles className="mr-1 h-3 w-3" /> Sistem Terpadu Pendidikan</Badge>
             <h1 className="font-display text-3xl font-bold md:text-5xl">{settings?.hero_title ?? "Membentuk Generasi Qur'ani, Cerdas & Berakhlak Mulia"}</h1>
-            <p className="mt-5 max-w-xl text-base text-white/90 md:text-lg">{settings?.hero_subtitle ?? settings?.deskripsi ?? "Yayasan Darul Rohman menyelenggarakan pendidikan Islam terpadu MI, SMP, SMK."}</p>
+            <p className="mt-5 max-w-xl text-base text-white/90 md:text-lg">{settings?.hero_subtitle ?? settings?.deskripsi ?? "Yayasan Darul Rohman menyelenggarakan pendidikan Islam terpadu MI, SMP, SMK, Madrasah Diniyah, dan TK."}</p>
             <div className="mt-7 flex flex-wrap gap-3">
               <a href="#unit"><Button size="lg" className="bg-secondary text-secondary-foreground">Jelajahi Unit <ArrowRight className="ml-2 h-4 w-4" /></Button></a>
               <a href="#kontak"><Button size="lg" variant="outline" className="border-white/40 bg-white/10 text-white hover:bg-white/20">Hubungi Kami</Button></a>
@@ -116,22 +116,34 @@ export default function PublicHome() {
         <div className="mx-auto max-w-7xl px-4 md:px-6">
           <div className="text-center">
             <Badge variant="outline" className="border-primary text-primary">Unit Pendidikan</Badge>
-            <h2 className="mt-3 font-display text-2xl font-bold md:text-3xl">MI · SMP · SMK</h2>
+            <h2 className="mt-3 font-display text-2xl font-bold md:text-3xl">MI · SMP · SMK · Madrasah · TK</h2>
           </div>
-          <div className="mt-8 grid gap-5 md:grid-cols-3">
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              { key: "mi", title: "MI Darul Rohman", icon: BookOpen, color: "gradient-primary", desc: settings?.deskripsi_mi },
-              { key: "smp", title: "SMP Darul Rohman", icon: GraduationCap, color: "gradient-sky", desc: settings?.deskripsi_smp },
-              { key: "smk", title: "SMK Darul Rohman", icon: Briefcase, color: "gradient-gold", desc: settings?.deskripsi_smk },
-            ].map((u) => (
-              <Card key={u.key} id={`unit-${u.key}`} className="scroll-mt-20 rounded-2xl border-border shadow-soft">
-                <CardContent className="p-6">
-                  <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${u.color} text-primary-foreground`}><u.icon className="h-7 w-7" /></div>
-                  <h3 className="mt-4 font-display text-xl font-bold">{u.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{u.desc ?? "Deskripsi belum diisi pada CMS."}</p>
-                </CardContent>
-              </Card>
-            ))}
+              { key: "mi" as const,       icon: BookOpen,      color: "gradient-primary", desc: settings?.deskripsi_mi },
+              { key: "smp" as const,      icon: GraduationCap, color: "gradient-sky",     desc: settings?.deskripsi_smp },
+              { key: "smk" as const,      icon: Briefcase,     color: "gradient-gold",    desc: settings?.deskripsi_smk },
+              { key: "madrasah" as const, icon: School,        color: "gradient-primary", desc: settings?.deskripsi_madrasah },
+              { key: "tk" as const,       icon: Sprout,        color: "gradient-sky",     desc: settings?.deskripsi_tk },
+            ].map((u) => {
+              const info = UNITS[u.key];
+              return (
+                <Card key={u.key} id={`unit-${u.key}`} className="scroll-mt-20 rounded-2xl border-border shadow-soft overflow-hidden">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-4">
+                      <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white p-1.5 shadow-soft">
+                        <img src={info.logo} alt={`Logo ${info.short}`} className="h-full w-full object-contain" />
+                      </div>
+                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${u.color} text-primary-foreground`}>
+                        <u.icon className="h-5 w-5" />
+                      </div>
+                    </div>
+                    <h3 className="mt-4 font-display text-lg font-bold">{info.fullName}</h3>
+                    <p className="mt-2 text-sm text-muted-foreground">{u.desc ?? "Deskripsi belum diisi pada CMS."}</p>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -172,12 +184,14 @@ export default function PublicHome() {
             </div>
             {showJadwal && (
             <Tabs defaultValue="mi" className="mt-6">
-              <TabsList>
+              <TabsList className="flex-wrap">
                 <TabsTrigger value="mi">MI</TabsTrigger>
                 <TabsTrigger value="smp">SMP</TabsTrigger>
                 <TabsTrigger value="smk">SMK</TabsTrigger>
+                <TabsTrigger value="madrasah">Madrasah</TabsTrigger>
+                <TabsTrigger value="tk">TK</TabsTrigger>
               </TabsList>
-              {(["mi", "smp", "smk"] as const).map((u) => {
+              {(["mi", "smp", "smk", "madrasah", "tk"] as const).map((u) => {
                 const rows = schedules.filter((s: any) => s.unit === u).slice(0, 20);
                 return (
                   <TabsContent key={u} value={u} className="mt-4">
@@ -228,7 +242,7 @@ export default function PublicHome() {
             <Badge className="border-0 bg-secondary text-secondary-foreground">PPDB</Badge>
             <h2 className="mt-3 font-display text-2xl font-bold md:text-3xl">Penerimaan Peserta Didik Baru</h2>
             <p className="mt-3 max-w-2xl text-sm text-primary-foreground/90">
-              Daftarkan putra-putri Anda di MI, SMP, atau SMK Darul Rohman. Hubungi kami untuk informasi pendaftaran.
+              Daftarkan putra-putri Anda di MI An-Nuriyah, SMP/SMK Darul Rohman, Madrasah Diniyah Al Arsyadiyah, atau TK PGRI 02 Roudlotul Huffadz. Hubungi kami untuk informasi pendaftaran.
             </p>
             <a href="#kontak"><Button size="lg" className="mt-5 bg-secondary text-secondary-foreground">Hubungi Pendaftaran <ArrowRight className="ml-2 h-4 w-4" /></Button></a>
           </div>

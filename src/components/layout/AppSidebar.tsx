@@ -8,13 +8,12 @@ import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
   SidebarMenu, SidebarMenuItem, useSidebar, SidebarHeader, SidebarFooter,
 } from "@/components/ui/sidebar";
-import logo from "@/assets/logo-yayasan.png";
 import { useAuth } from "@/context/AuthContext";
-import { ROLE_LABEL, Role, UnitKey } from "@/lib/units";
+import { ROLE_LABEL, Role, logoForRole, UNITS } from "@/lib/units";
 
 interface NavItem { title: string; url: string; icon: any; roles: Role[]; }
-const ALL: Role[] = ["super_admin", "admin_mi", "admin_smp", "admin_smk"];
-const UNIT_ADMINS: Role[] = ["admin_mi", "admin_smp", "admin_smk"];
+const ALL: Role[] = ["super_admin", "admin_mi", "admin_smp", "admin_smk", "admin_madrasah", "admin_tk"];
+const UNIT_ADMINS: Role[] = ["admin_mi", "admin_smp", "admin_smk", "admin_madrasah", "admin_tk"];
 
 const akademikItems: NavItem[] = [
   { title: "Siswa", url: "/siswa", icon: GraduationCap, roles: ALL },
@@ -76,9 +75,11 @@ export function AppSidebar() {
 
   const unitItems: NavItem[] = role === "super_admin"
     ? [
-        { title: "MI",  url: "/dashboard/mi",  icon: BookOpen, roles: ["super_admin"] },
-        { title: "SMP", url: "/dashboard/smp", icon: GraduationCap, roles: ["super_admin"] },
-        { title: "SMK", url: "/dashboard/smk", icon: Briefcase, roles: ["super_admin"] },
+        { title: "MI An-Nuriyah",      url: "/dashboard/mi",       icon: BookOpen,       roles: ["super_admin"] },
+        { title: "SMP Darul Rohman",   url: "/dashboard/smp",      icon: GraduationCap,  roles: ["super_admin"] },
+        { title: "SMK Darul Rohman",   url: "/dashboard/smk",      icon: Briefcase,      roles: ["super_admin"] },
+        { title: "Madrasah Diniyah",   url: "/dashboard/madrasah", icon: BookOpen,       roles: ["super_admin"] },
+        { title: "TK Roudlotul Huffadz", url: "/dashboard/tk",     icon: School,         roles: ["super_admin"] },
       ]
     : [];
 
@@ -88,16 +89,21 @@ export function AppSidebar() {
   const manajemen = visible(manajemenItems);
   const cms = visible(cmsItems);
 
+  const headerLogo = logoForRole(role, profile?.unit ?? null);
+  const headerName = role && role !== "super_admin" && profile?.unit
+    ? UNITS[profile.unit].name
+    : "Darul Rohman";
+
   return (
     <Sidebar collapsible="icon" className="border-r-0">
       <SidebarHeader className="border-b border-sidebar-border bg-sidebar p-4">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white p-1">
-            <img src={logo} alt="Logo Yayasan" className="h-full w-full object-contain" />
+            <img src={headerLogo} alt="Logo" className="h-full w-full object-contain" />
           </div>
           {!collapsed && (
             <div className="min-w-0 animate-fade-in">
-              <p className="truncate text-sm font-bold text-white">Darul Rohman</p>
+              <p className="truncate text-sm font-bold text-white">{headerName}</p>
               <p className="truncate text-xs font-medium text-white/85">
                 {role ? ROLE_LABEL[role] : "Morombuh Kwanyar"}
               </p>

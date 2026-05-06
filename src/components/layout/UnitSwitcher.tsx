@@ -1,5 +1,5 @@
 import { useUnit } from "@/context/UnitContext";
-import { UNITS, UnitKey } from "@/lib/units";
+import { UNITS, UnitKey, UNIT_KEYS } from "@/lib/units";
 import { Lock, ChevronDown } from "lucide-react";
 import {
   Select,
@@ -21,7 +21,7 @@ export function UnitSwitcher() {
     );
   }
 
-  const keys: UnitKey[] = ["mi", "smp", "smk"];
+  const keys: UnitKey[] = UNIT_KEYS;
 
   return (
     <Select value={unit} onValueChange={(v) => setUnit(v as UnitKey)}>
