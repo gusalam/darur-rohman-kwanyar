@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, LogIn, Search } from "lucide-react";
+import { Menu, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import logo from "@/assets/logo-yayasan.png";
 
 const NAV = [
-  { label: "Home", href: "#top" },
+  { label: "Beranda", href: "#top" },
   { label: "Tentang", href: "#tentang" },
   { label: "Unit", href: "#unit" },
   { label: "Akademik", href: "#akademik" },
