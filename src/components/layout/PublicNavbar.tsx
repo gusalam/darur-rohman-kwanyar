@@ -64,17 +64,8 @@ export function PublicNavbar({ yayasanName, tagline }: Props) {
           ))}
         </nav>
 
-        {/* Right: search + login */}
+        {/* Right: login + mobile trigger */}
         <div className="ml-auto flex items-center gap-3">
-          <form onSubmit={handleSearch} className="relative hidden md:block">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/60" />
-            <Input
-              name="q"
-              placeholder="Cari…"
-              className="h-10 w-40 xl:w-56 rounded-lg border-white/20 bg-white/10 pl-9 text-sm text-white placeholder:text-white/60 focus-visible:ring-secondary"
-            />
-          </form>
-
           <Link to="/login" className="hidden sm:block">
             <Button className="bg-secondary text-secondary-foreground font-bold hover:opacity-95">
               <LogIn className="mr-2 h-4 w-4" /> Login Admin
@@ -98,12 +89,6 @@ export function PublicNavbar({ yayasanName, tagline }: Props) {
                     <p className="truncate text-sm font-bold">{yayasanName ?? "Yayasan Darul Rohman"}</p>
                     {tagline && <p className="truncate text-[11px] text-white/70">{tagline}</p>}
                   </div>
-                </div>
-                <div className="border-b border-white/10 p-3">
-                  <form onSubmit={(e) => { handleSearch(e); setOpen(false); }} className="relative">
-                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/60" />
-                    <Input name="q" placeholder="Cari…" className="h-10 rounded-lg border-white/20 bg-white/10 pl-9 text-white placeholder:text-white/60" />
-                  </form>
                 </div>
                 <nav className="flex-1 space-y-1 overflow-y-auto p-3">
                   {NAV.map((n) => (
