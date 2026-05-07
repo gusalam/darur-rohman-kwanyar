@@ -348,7 +348,14 @@ export default function PublicHome() {
           </div>
           {settings?.map_embed && (
             <div className="aspect-video overflow-hidden rounded-2xl shadow-soft">
-              <iframe src={settings.map_embed} title="Map" className="h-full w-full" loading="lazy" />
+              <iframe
+                src={normalizeMapEmbed(settings.map_embed)}
+                title="Lokasi"
+                className="h-full w-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
             </div>
           )}
         </div>
