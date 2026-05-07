@@ -22,6 +22,17 @@ export async function listFiles(bucket: Bucket, folder = "") {
 }
 
 export async function deleteFile(bucket: Bucket, path: string) {
-  const { error } = await supabase.storage.from(bucket).remove([path]);
+  // Strip full public URL if accidentally passed
+  let cleanPath = path;
+  const marker = `/object/public/${bucket}/`;
+  const idx = cleanPath.indexOf(marker);
+  if (idx >= 0) cleanPath = cleanPath.substring(idx + marker.length);
+  cleanPath = cleanPath.replace(/^\/+/, "");
+
+  const { data, error } = await supabase.storage.from(bucket).remove([cleanPath]);
   if (error) throw error;
+  // Supabase returns [] silently when RLS blocks the delete
+  if (!data || data.length === 0) {
+    throw new Error("File tidak terhapus (cek izin / path salah)");
+  }
 }
