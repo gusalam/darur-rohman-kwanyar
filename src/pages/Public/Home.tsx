@@ -15,6 +15,24 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 
 const PLACEHOLDER = "/placeholder.png";
 
+/** Accept full <iframe> markup, share URL, or embed URL and return a usable iframe src. */
+function normalizeMapEmbed(input: string): string {
+  if (!input) return "";
+  const v = input.trim();
+  // Full iframe HTML — extract src
+  const m = v.match(/<iframe[^>]+src=["']([^"']+)["']/i);
+  if (m) return m[1];
+  // Short share link maps.app.goo.gl / goo.gl/maps — wrap as q=
+  if (/^https?:\/\/(maps\.app\.goo\.gl|goo\.gl\/maps)/i.test(v)) {
+    return `https://maps.google.com/maps?q=${encodeURIComponent(v)}&output=embed`;
+  }
+  // Regular maps URL without /embed — convert
+  if (/^https?:\/\/(www\.)?google\.[^/]+\/maps\//i.test(v) && !/\/embed/.test(v)) {
+    return `https://maps.google.com/maps?q=${encodeURIComponent(v)}&output=embed`;
+  }
+  return v;
+}
+
 export default function PublicHome() {
   const [settings, setSettings] = useState<any>(null);
   const [showJadwal, setShowJadwal] = useState(false);
@@ -348,7 +366,14 @@ export default function PublicHome() {
           </div>
           {settings?.map_embed && (
             <div className="aspect-video overflow-hidden rounded-2xl shadow-soft">
-              <iframe src={settings.map_embed} title="Map" className="h-full w-full" loading="lazy" />
+              <iframe
+                src={normalizeMapEmbed(settings.map_embed)}
+                title="Lokasi"
+                className="h-full w-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
             </div>
           )}
         </div>
