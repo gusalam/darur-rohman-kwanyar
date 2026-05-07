@@ -10,6 +10,7 @@ import { listFiles } from "@/lib/storage";
 import { GraduationCap, BookOpen, Briefcase, MapPin, Phone, Mail, Sparkles, ArrowRight, LogIn, Newspaper, Megaphone, ImageIcon, Calendar, School, Sprout } from "lucide-react";
 import { UNITS } from "@/lib/units";
 import { PublicNavbar } from "@/components/layout/PublicNavbar";
+import { SEO } from "@/components/SEO";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
@@ -90,6 +91,12 @@ export default function PublicHome() {
 
   return (
     <div id="top" className="min-h-screen bg-background text-foreground">
+      <SEO
+        title={`${settings?.nama_yayasan ?? "Yayasan Darur Rohman Morombuh Kwanyar"} — MI An-Nuriyah, SMP, Madrasah Diniyah, TK`}
+        description={settings?.deskripsi ?? "Website resmi Yayasan Darur Rohman Morombuh Kwanyar: MI An-Nuriyah, SMP Darul Rohman, SMK Darul Rohman, Madrasah Diniyah Al Arsyadiyah, dan TK PGRI 02 Roudlotul Huffadz."}
+        canonical="https://yayasandarurrahmanku.web.app/"
+        image={settings?.logo_url}
+      />
       <PublicNavbar yayasanName={settings?.nama_yayasan} tagline={settings?.tagline} />
 
       <div className="min-w-0">
