@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PublicNavbar } from "@/components/layout/PublicNavbar";
+import { SEO } from "@/components/SEO";
 
 const PLACEHOLDER = "/placeholder.png";
 
@@ -47,6 +48,12 @@ export default function PostDetail() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEO
+        title={post ? `${post.title} — Yayasan Darur Rohman` : "Berita — Yayasan Darur Rohman"}
+        description={post?.excerpt || post?.content?.slice(0, 155) || "Berita dan informasi Yayasan Darur Rohman Morombuh Kwanyar."}
+        image={post?.cover_url}
+        type="article"
+      />
       <PublicNavbar yayasanName={settings?.nama_yayasan} tagline={settings?.tagline} />
 
       <div className="mx-auto max-w-4xl px-4 py-10 md:px-6">
