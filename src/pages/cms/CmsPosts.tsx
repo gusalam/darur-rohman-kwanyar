@@ -34,12 +34,22 @@ export default function CmsPosts() {
   const [advOpen, setAdvOpen] = useState(false);
   const { confirm, dialogProps } = useConfirm();
 
+  const autoExcerpt = (text: string) => {
+    if (!text) return "";
+    const clean = text.replace(/\s+/g, " ").trim();
+    return clean.length > 155 ? clean.slice(0, 152).trimEnd() + "..." : clean;
+  };
+  const autoTitle = (t: string) => (t.length > 60 ? t.slice(0, 57).trimEnd() + "..." : t);
+
   const save = async (publish?: boolean) => {
     if (!draft.title?.trim()) return toast.error("Judul wajib diisi");
     setSaving(true);
+    const title = draft.title.trim();
     const payload: any = {
       ...draft,
-      slug: draft.slug || slugify(draft.title),
+      title: autoTitle(title),
+      slug: draft.slug?.trim() ? slugify(draft.slug) : slugify(title),
+      excerpt: draft.excerpt?.trim() ? draft.excerpt.trim() : autoExcerpt(draft.content || ""),
       unit: draft.unit || null,
       status: publish === undefined ? draft.status : publish ? "published" : "draft",
       author_id: draft.author_id ?? user?.id ?? null,
