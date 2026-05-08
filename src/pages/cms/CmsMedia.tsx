@@ -7,7 +7,8 @@ import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { SearchBar } from "@/components/shared/SearchBar";
 import { DropZone } from "@/components/shared/DropZone";
 import { useConfirm } from "@/hooks/useConfirm";
-import { uploadFile, listFiles, deleteFile, Bucket } from "@/lib/storage";
+import { supabase } from "@/integrations/supabase/client";
+import { uploadFile, listFiles, deleteFile, getStoragePath, Bucket } from "@/lib/storage";
 import { useDebounce } from "@/hooks/useDebounce";
 import { Trash2, Copy, ImageIcon, Loader2, Check } from "lucide-react";
 import { toast } from "sonner";
@@ -21,6 +22,15 @@ const TABS: { key: "all" | Bucket; label: string }[] = [
 ];
 
 interface MediaItem { name: string; path: string; publicUrl: string; bucket: Bucket; }
+
+const MEDIA_TABLES = ["media", "cms_media", "media_library"];
+
+const errorMessage = (error: unknown) => error instanceof Error ? error.message : "Terjadi kesalahan";
+
+type DeleteResult = { error: { code?: string; message: string } | null };
+type DeleteFilter = { eq: (column: string, value: string) => Promise<DeleteResult> };
+type DeleteBuilder = { eq: (column: string, value: string) => DeleteFilter };
+const dynamicSupabase = supabase as unknown as { from: (table: string) => { delete: () => DeleteBuilder } };
 
 export default function CmsMedia() {
   const [tab, setTab] = useState<"all" | Bucket>("all");
@@ -43,7 +53,7 @@ export default function CmsMedia() {
         files.forEach((f) => all.push({ ...f, bucket: b }));
       }
       setItems(all);
-    } catch (e: any) { toast.error(e.message); }
+    } catch (e) { toast.error(errorMessage(e)); }
     setLoading(false);
   };
 
@@ -62,14 +72,30 @@ export default function CmsMedia() {
   const onUpload = async (f: File) => {
     setUploading(true);
     try { await uploadFile(targetBucket, f); toast.success("Upload sukses"); refresh(); }
-    catch (e: any) { toast.error(e.message); }
+    catch (e) { toast.error(errorMessage(e)); }
     finally { setUploading(false); }
+  };
+
+  const deleteMediaRecord = async (item: MediaItem) => {
+    const storagePath = getStoragePath(item.bucket, item.path);
+    const results = await Promise.all(MEDIA_TABLES.map((table) =>
+      dynamicSupabase.from(table).delete().eq("bucket", item.bucket).eq("storage_path", storagePath),
+    ));
+    const error = results.find((result) => result.error && !["42P01", "42703"].includes(result.error.code))?.error;
+    if (error) throw error;
   };
 
   const remove = (item: MediaItem) => {
     confirm({
       title: "Hapus File", description: `Yakin ingin menghapus "${item.name}"?`, variant: "danger", confirmLabel: "Ya, hapus",
-      onConfirm: async () => { await deleteFile(item.bucket, item.path); toast.success("File dihapus"); refresh(); setPreview(null); }
+      onConfirm: async () => {
+        await deleteFile(item.bucket, item.path);
+        await deleteMediaRecord(item);
+        setItems((current) => current.filter((f) => !(f.bucket === item.bucket && f.path === item.path)));
+        setPreview(null);
+        toast.success("File dihapus");
+        await refresh();
+      }
     });
   };
 
