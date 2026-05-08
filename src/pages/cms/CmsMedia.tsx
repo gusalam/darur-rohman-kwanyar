@@ -27,6 +27,11 @@ const MEDIA_TABLES = ["media", "cms_media", "media_library"];
 
 const errorMessage = (error: unknown) => error instanceof Error ? error.message : "Terjadi kesalahan";
 
+type DeleteResult = { error: { code?: string; message: string } | null };
+type DeleteFilter = { eq: (column: string, value: string) => Promise<DeleteResult> };
+type DeleteBuilder = { eq: (column: string, value: string) => DeleteFilter };
+const dynamicSupabase = supabase as unknown as { from: (table: string) => { delete: () => DeleteBuilder } };
+
 export default function CmsMedia() {
   const [tab, setTab] = useState<"all" | Bucket>("all");
   const [items, setItems] = useState<MediaItem[]>([]);
@@ -74,7 +79,7 @@ export default function CmsMedia() {
   const deleteMediaRecord = async (item: MediaItem) => {
     const storagePath = getStoragePath(item.bucket, item.path);
     const results = await Promise.all(MEDIA_TABLES.map((table) =>
-      supabase.from(table).delete().eq("bucket", item.bucket).eq("storage_path", storagePath),
+      dynamicSupabase.from(table).delete().eq("bucket", item.bucket).eq("storage_path", storagePath),
     ));
     const error = results.find((result) => result.error && !["42P01", "42703"].includes(result.error.code))?.error;
     if (error) throw error;
