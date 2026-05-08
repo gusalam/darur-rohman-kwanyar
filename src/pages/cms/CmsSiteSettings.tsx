@@ -67,12 +67,26 @@ export default function CmsSiteSettings() {
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
               <Field label="Hero Title"><Input value={row.hero_title ?? ""} onChange={(e) => setRow({ ...row, hero_title: e.target.value })} /></Field>
               <Field label="Hero Subtitle"><Input value={row.hero_subtitle ?? ""} onChange={(e) => setRow({ ...row, hero_subtitle: e.target.value })} /></Field>
-              <div className="md:col-span-2"><Field label="Hero Image">
+              <div className="md:col-span-2"><Field label="Hero Image (fallback jika video kosong)">
                 <div className="flex items-center gap-2">
                   <Input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && onHero(e.target.files[0])} />
                   {row.hero_image_url && <img src={row.hero_image_url} alt="" className="h-12 w-20 rounded object-cover" />}
                 </div>
               </Field></div>
+              <div className="md:col-span-2"><Field label="Hero Video (Upload .mp4/.webm)">
+                <div className="flex items-center gap-2">
+                  <Input type="file" accept="video/*" onChange={(e) => e.target.files?.[0] && onHeroVideo(e.target.files[0])} />
+                </div>
+              </Field></div>
+              <div className="md:col-span-2"><Field label="Atau Hero Video URL (link langsung .mp4)">
+                <Input value={row.hero_video_url ?? ""} onChange={(e) => setRow({ ...row, hero_video_url: e.target.value })} placeholder="https://.../video.mp4" />
+              </Field></div>
+              {row.hero_video_url && (
+                <div className="md:col-span-2">
+                  <p className="mb-2 text-sm text-muted-foreground">Preview Video Hero:</p>
+                  <video src={row.hero_video_url} controls muted className="aspect-video w-full max-w-md rounded-lg bg-black object-cover" />
+                </div>
+              )}
             </div>
           </div>
 
