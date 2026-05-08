@@ -136,6 +136,10 @@ export default function CmsPosts() {
                 onChange={(e) => setDraft({ ...draft, title: e.target.value })}
                 className="h-12 text-lg font-semibold"
               />
+              <p className="text-[11px] text-muted-foreground">
+                Slug & meta description akan dibuat otomatis dari judul/konten jika dikosongkan.
+                {draft.title && <> Slug: <code className="rounded bg-muted px-1">{slugify(draft.title)}</code></>}
+              </p>
             </div>
 
             <div className="space-y-2">
