@@ -88,6 +88,7 @@ export default function PublicHome() {
   })();
 
   const heroBg = settings?.hero_image_url || banners[0]?.image_url;
+  const heroVideo = settings?.hero_video_url;
 
   return (
     <div id="top" className="min-h-screen bg-background text-foreground">
