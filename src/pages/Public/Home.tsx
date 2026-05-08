@@ -90,13 +90,43 @@ export default function PublicHome() {
   const heroBg = settings?.hero_image_url || banners[0]?.image_url;
   const heroVideo = settings?.hero_video_url;
 
+  const SITE = "https://yayasandarurrahmanku.web.app";
+  const sections = [
+    { id: "tentang", name: "Tentang" },
+    { id: "unit", name: "Unit Pendidikan" },
+    { id: "ppdb", name: "PPDB" },
+    { id: "berita", name: "Berita" },
+    { id: "galeri", name: "Galeri" },
+    { id: "kontak", name: "Kontak" },
+  ];
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Beranda", item: SITE + "/" },
+      ...sections.map((s, i) => ({ "@type": "ListItem", position: i + 2, name: s.name, item: `${SITE}/#${s.id}` })),
+    ],
+  };
+  const navLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Navigasi Utama",
+    itemListElement: sections.map((s, i) => ({
+      "@type": "SiteNavigationElement",
+      position: i + 1,
+      name: s.name,
+      url: `${SITE}/#${s.id}`,
+    })),
+  };
+
   return (
     <div id="top" className="min-h-screen bg-background text-foreground">
       <SEO
         title={`${settings?.nama_yayasan ?? "Yayasan Darur Rohman Morombuh Kwanyar"} — MI An-Nuriyah, SMP, Madrasah Diniyah, TK`}
         description={settings?.deskripsi ?? "Website resmi Yayasan Darur Rohman Morombuh Kwanyar: MI An-Nuriyah, SMP Darul Rohman, SMK Darul Rohman, Madrasah Diniyah Al Arsyadiyah, dan TK PGRI 02 Roudlotul Huffadz."}
-        canonical="https://yayasandarurrahmanku.web.app/"
+        canonical={SITE + "/"}
         image={settings?.logo_url}
+        jsonLd={[breadcrumbLd, navLd]}
       />
       <PublicNavbar yayasanName={settings?.nama_yayasan} tagline={settings?.tagline} />
 
