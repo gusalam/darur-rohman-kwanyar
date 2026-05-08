@@ -7,7 +7,7 @@ interface SEOProps {
   canonical?: string;
   type?: "website" | "article";
   noIndex?: boolean;
-  jsonLd?: Record<string, any>;
+  jsonLd?: Record<string, any> | Record<string, any>[];
 }
 
 const SITE = "https://yayasandarurrahmanku.web.app";
