@@ -46,13 +46,43 @@ export default function PostDetail() {
     })();
   }, [slug]);
 
+  const SITE = "https://yayasandarurrahmanku.web.app";
+  const canonical = post ? `${SITE}/berita/${post.slug}` : `${SITE}/berita`;
+  const description = post?.excerpt || post?.content?.slice(0, 155) || "Berita dan informasi Yayasan Darur Rohman Morombuh Kwanyar.";
+  const jsonLd = post ? [
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Beranda", item: SITE + "/" },
+        { "@type": "ListItem", position: 2, name: "Berita", item: SITE + "/#berita" },
+        { "@type": "ListItem", position: 3, name: post.title, item: canonical },
+      ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      headline: post.title,
+      description,
+      image: post.cover_url ? [post.cover_url] : undefined,
+      datePublished: post.published_at || post.created_at,
+      dateModified: post.updated_at || post.published_at || post.created_at,
+      author: { "@type": "Organization", name: settings?.nama_yayasan || "Yayasan Darur Rohman" },
+      publisher: { "@type": "Organization", name: settings?.nama_yayasan || "Yayasan Darur Rohman" },
+      mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
+      articleSection: post.category,
+    },
+  ] : undefined;
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <SEO
         title={post ? `${post.title} — Yayasan Darur Rohman` : "Berita — Yayasan Darur Rohman"}
-        description={post?.excerpt || post?.content?.slice(0, 155) || "Berita dan informasi Yayasan Darur Rohman Morombuh Kwanyar."}
+        description={description}
         image={post?.cover_url}
+        canonical={canonical}
         type="article"
+        jsonLd={jsonLd}
       />
       <PublicNavbar yayasanName={settings?.nama_yayasan} tagline={settings?.tagline} />
 

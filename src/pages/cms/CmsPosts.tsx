@@ -34,12 +34,22 @@ export default function CmsPosts() {
   const [advOpen, setAdvOpen] = useState(false);
   const { confirm, dialogProps } = useConfirm();
 
+  const autoExcerpt = (text: string) => {
+    if (!text) return "";
+    const clean = text.replace(/\s+/g, " ").trim();
+    return clean.length > 155 ? clean.slice(0, 152).trimEnd() + "..." : clean;
+  };
+  const autoTitle = (t: string) => (t.length > 60 ? t.slice(0, 57).trimEnd() + "..." : t);
+
   const save = async (publish?: boolean) => {
     if (!draft.title?.trim()) return toast.error("Judul wajib diisi");
     setSaving(true);
+    const title = draft.title.trim();
     const payload: any = {
       ...draft,
-      slug: draft.slug || slugify(draft.title),
+      title: autoTitle(title),
+      slug: draft.slug?.trim() ? slugify(draft.slug) : slugify(title),
+      excerpt: draft.excerpt?.trim() ? draft.excerpt.trim() : autoExcerpt(draft.content || ""),
       unit: draft.unit || null,
       status: publish === undefined ? draft.status : publish ? "published" : "draft",
       author_id: draft.author_id ?? user?.id ?? null,
@@ -126,6 +136,10 @@ export default function CmsPosts() {
                 onChange={(e) => setDraft({ ...draft, title: e.target.value })}
                 className="h-12 text-lg font-semibold"
               />
+              <p className="text-[11px] text-muted-foreground">
+                Slug & meta description akan dibuat otomatis dari judul/konten jika dikosongkan.
+                {draft.title && <> Slug: <code className="rounded bg-muted px-1">{slugify(draft.title)}</code></>}
+              </p>
             </div>
 
             <div className="space-y-2">

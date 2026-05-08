@@ -7,7 +7,7 @@ interface SEOProps {
   canonical?: string;
   type?: "website" | "article";
   noIndex?: boolean;
-  jsonLd?: Record<string, any>;
+  jsonLd?: Record<string, any> | Record<string, any>[];
 }
 
 const SITE = "https://yayasandarurrahmanku.web.app";
@@ -53,17 +53,19 @@ export function SEO({ title, description, image, canonical, type = "website", no
     if (description) setMeta("name", "twitter:description", description);
     if (image) setMeta("name", "twitter:image", image);
 
-    let script: HTMLScriptElement | null = null;
+    const scripts: HTMLScriptElement[] = [];
     if (jsonLd) {
-      script = document.createElement("script");
-      script.type = "application/ld+json";
-      script.dataset.dynamic = "true";
-      script.text = JSON.stringify(jsonLd);
-      document.head.appendChild(script);
+      const arr = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
+      arr.forEach((data) => {
+        const s = document.createElement("script");
+        s.type = "application/ld+json";
+        s.dataset.dynamic = "true";
+        s.text = JSON.stringify(data);
+        document.head.appendChild(s);
+        scripts.push(s);
+      });
     }
-    return () => {
-      if (script) script.remove();
-    };
+    return () => { scripts.forEach((s) => s.remove()); };
   }, [title, description, image, canonical, type, noIndex, JSON.stringify(jsonLd)]);
 
   return null;
