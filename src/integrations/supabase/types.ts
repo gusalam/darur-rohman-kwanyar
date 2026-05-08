@@ -500,6 +500,7 @@ export type Database = {
           hero_image_url: string | null
           hero_subtitle: string | null
           hero_title: string | null
+          hero_video_url: string | null
           id: string
           map_embed: string | null
           nama_yayasan: string
@@ -522,6 +523,7 @@ export type Database = {
           hero_image_url?: string | null
           hero_subtitle?: string | null
           hero_title?: string | null
+          hero_video_url?: string | null
           id?: string
           map_embed?: string | null
           nama_yayasan?: string
@@ -544,6 +546,7 @@ export type Database = {
           hero_image_url?: string | null
           hero_subtitle?: string | null
           hero_title?: string | null
+          hero_video_url?: string | null
           id?: string
           map_embed?: string | null
           nama_yayasan?: string

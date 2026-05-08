@@ -88,6 +88,7 @@ export default function PublicHome() {
   })();
 
   const heroBg = settings?.hero_image_url || banners[0]?.image_url;
+  const heroVideo = settings?.hero_video_url;
 
   return (
     <div id="top" className="min-h-screen bg-background text-foreground">
@@ -102,7 +103,22 @@ export default function PublicHome() {
       <div className="min-w-0">
 
         <section id="tentang" className="relative overflow-hidden gradient-hero text-white">
-          {heroBg && <div className="absolute inset-0 opacity-30" style={{ backgroundImage: `url(${heroBg})`, backgroundSize: "cover", backgroundPosition: "center" }} />}
+          {heroVideo ? (
+            <>
+              <video
+                src={heroVideo}
+                autoPlay
+                muted
+                loop
+                playsInline
+                poster={heroBg || undefined}
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+              <div className="absolute inset-0 bg-black/50" />
+            </>
+          ) : (
+            heroBg && <div className="absolute inset-0 opacity-30" style={{ backgroundImage: `url(${heroBg})`, backgroundSize: "cover", backgroundPosition: "center" }} />
+          )}
           <div className="relative mx-auto max-w-6xl px-4 py-16 md:py-24 md:px-8">
             <Badge className="mb-4 border-0 bg-secondary text-secondary-foreground"><Sparkles className="mr-1 h-3 w-3" /> Sistem Terpadu Pendidikan</Badge>
             <h1 className="font-display text-3xl font-bold md:text-5xl">{settings?.hero_title ?? "Membentuk Generasi Qur'ani, Cerdas & Berakhlak Mulia"}</h1>
