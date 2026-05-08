@@ -25,6 +25,8 @@ interface MediaItem { name: string; path: string; publicUrl: string; bucket: Buc
 
 const MEDIA_TABLES = ["media", "cms_media", "media_library"];
 
+const errorMessage = (error: unknown) => error instanceof Error ? error.message : "Terjadi kesalahan";
+
 export default function CmsMedia() {
   const [tab, setTab] = useState<"all" | Bucket>("all");
   const [items, setItems] = useState<MediaItem[]>([]);
@@ -46,7 +48,7 @@ export default function CmsMedia() {
         files.forEach((f) => all.push({ ...f, bucket: b }));
       }
       setItems(all);
-    } catch (e: any) { toast.error(e.message); }
+    } catch (e) { toast.error(errorMessage(e)); }
     setLoading(false);
   };
 
@@ -65,15 +67,17 @@ export default function CmsMedia() {
   const onUpload = async (f: File) => {
     setUploading(true);
     try { await uploadFile(targetBucket, f); toast.success("Upload sukses"); refresh(); }
-    catch (e: any) { toast.error(e.message); }
+    catch (e) { toast.error(errorMessage(e)); }
     finally { setUploading(false); }
   };
 
   const deleteMediaRecord = async (item: MediaItem) => {
     const storagePath = getStoragePath(item.bucket, item.path);
-    await Promise.all(MEDIA_TABLES.map((table) =>
-      supabase.from(table as any).delete().eq("bucket", item.bucket).eq("storage_path", storagePath),
+    const results = await Promise.all(MEDIA_TABLES.map((table) =>
+      supabase.from(table).delete().eq("bucket", item.bucket).eq("storage_path", storagePath),
     ));
+    const error = results.find((result) => result.error && !["42P01", "42703"].includes(result.error.code))?.error;
+    if (error) throw error;
   };
 
   const remove = (item: MediaItem) => {
