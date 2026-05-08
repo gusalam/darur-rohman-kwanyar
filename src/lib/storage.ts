@@ -35,10 +35,20 @@ export async function deleteFile(bucket: Bucket, path: string) {
   const storagePath = getStoragePath(bucket, path);
   const { data, error } = await supabase.storage.from(bucket).remove([storagePath]);
   if (error) throw error;
-  if (data && data.length > 0) return;
+  if (data && data.length > 0) return [storagePath];
+
+  const slash = storagePath.lastIndexOf("/");
+  const parent = slash >= 0 ? storagePath.slice(0, slash) : "";
+  const name = slash >= 0 ? storagePath.slice(slash + 1) : storagePath;
+  const { data: siblings, error: listError } = await supabase.storage.from(bucket).list(parent, { limit: 200 });
+  if (listError) throw listError;
+  const existing = (siblings ?? []).find((item) => item.name === name);
+  if (!existing) return [storagePath];
+  if (existing.id) throw new Error("File tidak terhapus dari Supabase Storage");
 
   const nested = await listFiles(bucket, storagePath);
-  if (nested.length === 0) return;
+  if (nested.length === 0) return [storagePath];
   const { error: nestedError } = await supabase.storage.from(bucket).remove(nested.map((f) => f.path));
   if (nestedError) throw nestedError;
+  return nested.map((f) => f.path);
 }
