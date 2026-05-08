@@ -39,6 +39,9 @@ export default function CmsSiteSettings() {
   const onHero = async (f: File) => {
     try { const { publicUrl } = await uploadFile("hero", f); setRow({ ...row, hero_image_url: publicUrl }); toast.success("Hero terupload"); } catch (e: any) { toast.error(e.message); }
   };
+  const onHeroVideo = async (f: File) => {
+    try { const { publicUrl } = await uploadFile("hero", f); setRow({ ...row, hero_video_url: publicUrl }); toast.success("Video hero terupload"); } catch (e: any) { toast.error(e.message); }
+  };
 
   if (loading || !row) return <p className="py-12 text-center text-muted-foreground">Memuat...</p>;
 
